@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/Shaun/Documents/Development/BoLui/bolui/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values/values.xml",
+            "outputFile": "/Users/Shaun/Documents/Development/BoLui/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values/values.xml",
             "map": [
                 {
-                    "source": "/Users/Shaun/Documents/Development/BoLui/bolui/android/app/src/main/res/values/styles.xml",
+                    "source": "/Users/Shaun/Documents/Development/BoLui/android/app/src/main/res/values/styles.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

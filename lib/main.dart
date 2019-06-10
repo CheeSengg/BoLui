@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'widgets/BottomNaviBar.dart';
 
 void main() => runApp(MainPage());
 
@@ -16,7 +17,7 @@ class MainPage extends StatelessWidget {
             RemainingBudget(),
           ],
         ),
-        bottomNavigationBar: EventBar(),
+        bottomNavigationBar: BottomNaviBar(),
       ),
     );
   }
@@ -104,24 +105,3 @@ class Transactions extends StatelessWidget{
   }
 }
 
-class EventBar extends StatelessWidget{
-  Widget build(BuildContext context){
-    return BottomNavigationBar(
-      currentIndex: 1, // this will be set when a new tab is tapped
-      items: [
-        BottomNavigationBarItem(
-          icon: new Icon(Icons.calendar_today),
-          title: new Text('Calendar'),
-        ),
-        BottomNavigationBarItem(
-          icon: new Icon(Icons.assessment),
-          title: new Text('Stats'),
-        ),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            title: Text('Settings')
-        )
-      ],
-    );
-  }
-}
