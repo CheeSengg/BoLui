@@ -1,0 +1,4 @@
+#Mon Jun 10 23:21:14 SGT 2019
+base.0=/Users/Shaun/Documents/Development/BoLui/bolui/build/app/intermediates/transforms/dexMerger/debug/0
+path.0=classes.dex
+renamed.0=classes.dex
