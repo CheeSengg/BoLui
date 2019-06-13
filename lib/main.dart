@@ -1,107 +1,58 @@
 import 'package:flutter/material.dart';
-import 'widgets/BottomNaviBar.dart';
+import 'screens/HomePage.dart';
+import 'screens/SettingsPage.dart';
 
-void main() => runApp(MainPage());
+void main() => runApp(MyApp());
 
-class MainPage extends StatelessWidget {
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            PiChart(),
-            Spending(),
-            RemainingBudget(),
-          ],
-        ),
-        bottomNavigationBar: BottomNaviBar(),
-      ),
+      title: 'flutter demo',
+      home: MyHomePage(),
     );
   }
 }
 
-class PiChart extends StatelessWidget{
-  Widget build(BuildContext context){
-    return Container(
-      height: 400,
-      child: Center(
-        child: Text("Hi",
-          style: TextStyle(
-            fontSize: 30,
-            color: Colors.black,
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int currentTab = 0;
+
+  final List<Widget> list = [
+    HomePage(),
+    SettingsPage(),
+    SettingsPage()
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Bolui"),
+      ),
+      body: list[currentTab],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: currentTab,
+        onTap: (int index) {
+          setState(() => currentTab = index);
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: new Icon(Icons.calendar_today),
+            title: new Text('Calendar'),
           ),
-        )
-      ),
-    );
-  }
-}
-
-class Spending extends StatelessWidget{
-  Widget build(BuildContext context){
-    return Container(
-      child: Row(
-        children: <Widget>[
-          Container(padding: EdgeInsets.all(20)),
-          _redBox(),
-          Container(padding: EdgeInsets.all(5)),
-          Text('Spendings ', style: TextStyle(fontSize: 16, color: Colors.red)),
-          Text('Amount ', style: TextStyle(fontSize: 16, color: Colors.red)),
+          BottomNavigationBarItem(
+            icon: new Icon(Icons.assessment),
+            title: new Text('Stats'),
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.settings), title: Text('Settings'))
         ],
       ),
     );
   }
-
-  Widget _redBox(){
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.red
-      ),
-      child: Icon(Icons.crop_square, color: Colors.red),
-    );
-  }
 }
-
-class RemainingBudget extends StatelessWidget{
-  Widget build(BuildContext context){
-    return Container(
-      child: Row(
-        children: <Widget>[
-          Container(padding: EdgeInsets.all(20)),
-          _greenBox(),
-          Container(padding: EdgeInsets.all(5)),
-          Text('Remaining ', style: TextStyle(fontSize: 16, color: Colors.green)),
-          Text('Amount ', style: TextStyle(fontSize: 16, color: Colors.green)),
-        ],
-      ),
-    );
-  }
-
-  Widget _greenBox(){
-    return Container(
-      decoration: BoxDecoration(
-          color: Colors.green
-      ),
-      child: Icon(Icons.crop_square, color: Colors.green),
-    );
-  }
-}
-
-class Transactions extends StatelessWidget{
-  Widget build(BuildContext context){
-    return Container(
-      child: Center(
-          child: Text("A",
-            textDirection: TextDirection.ltr,
-            style: TextStyle(
-              fontSize: 10,
-              color: Colors.black,
-            ),
-          )
-      ),
-    );
-  }
-}
-
