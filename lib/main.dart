@@ -28,11 +28,17 @@ class _MyHomePageState extends State<MyHomePage> {
     SettingsPage()
   ];
 
+  final List<String> header = [
+    "Home",
+    "Stats",
+    "Settings"
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Bolui"),
+        title: Text(header[currentTab]),
       ),
       body: list[currentTab],
       bottomNavigationBar: BottomNavigationBar(
