@@ -1,7 +1,10 @@
+//Packages
 import 'package:flutter/material.dart';
+
+//Imports from own app
 import 'screens/HomePage.dart';
 import 'screens/SettingsPage.dart';
-import 'package:provider/provider.dart'
+
 
 void main() => runApp(MyApp());
 
@@ -9,6 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'flutter demo',
       home: MyHomePage(),
     );
