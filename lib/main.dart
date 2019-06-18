@@ -25,11 +25,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int currentTab = 0;
+  int currentTab = 1;
 
   final List<Widget> list = [
-    HomePage(),
     SettingsPage(),
+    HomePage(),
     SettingsPage()
   ];
 
