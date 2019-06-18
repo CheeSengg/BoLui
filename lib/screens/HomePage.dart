@@ -17,16 +17,17 @@ class _HomePageState extends State<HomePage> {
   // Hardcoded trial data (can be deleted)
   _generateData(){
     var sampleData = [
-      new PiData('Spending', 100.0),
-      new PiData('Remaining', 50.0)
+      new PiData('Spending', 100.0, Colors.red),
+      new PiData('Remaining', 50.0, Colors.green)
     ];
 
     _createSampleData.add(
       charts.Series(
+        id: 'Chart Name',
         data: sampleData,
-        domainFn: (PiData piData,_) => piData.item,
+        domainFn: (PiData piData,_) => piData.item + " " + piData.expenditure.toStringAsFixed(2),
         measureFn: (PiData piData,_) => piData.expenditure,
-        id: 'Chart Name'
+        colorFn: (PiData piData,_) => charts.ColorUtil.fromDartColor(piData.colorVal)
       ),
     );
   }
@@ -48,8 +49,14 @@ class _HomePageState extends State<HomePage> {
             Expanded(
               child: PiChart(_createSampleData),
             ),
-            Display('Spending', 100.00, Colors.red),
-            Display('Remaining', 50.00, Colors.green)
+            Padding(padding: EdgeInsets.only(top: 15)),
+            FloatingActionButton(
+              onPressed: () {},
+              child: Icon(Icons.add),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16.0))),
+              backgroundColor: Colors.cyan,
+            ),
+            Padding(padding: EdgeInsets.only(top: 20)),
           ],
         ),
       ),
@@ -69,57 +76,25 @@ class PiChart extends StatelessWidget {
       seriesList,
       animate: true,
       animationDuration: Duration(seconds: 3),
-      defaultRenderer: new charts.ArcRendererConfig(
-        arcWidth: 100,
-      ),
+      behaviors: [
+        new charts.DatumLegend(
+          position: charts.BehaviorPosition.bottom,
+          horizontalFirst: false,
+          cellPadding: new EdgeInsets.only(bottom: 4.0),
+          entryTextStyle: charts.TextStyleSpec(
+            fontFamily: 'Rock Salt',
+            fontSize: 20,
+          )
+        )
+      ],
     );
   }
 }
 
-// need to check again if this is suppose to be Stateless or Stateful
-// also actually can be integrated with the PiChart class.
-class Display extends StatelessWidget{
-  String item;
-  double amount;
-  Color colorVal;
-
-  Display(this.item, this.amount, this.colorVal);
-
-  Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        children: <Widget>[
-          Container(padding: EdgeInsets.all(20)),
-          _box(),
-          Container(padding: EdgeInsets.all(5)),
-          Text(item + " ", style: TextStyle(fontSize: 16, color: colorVal)),
-          Text(amount.toStringAsFixed(2), style: TextStyle(fontSize: 16, color: colorVal)),
-        ],
-      ),
-    );
-  }
-
-  Widget _box() {
-    return Container(
-      decoration: BoxDecoration(
-          color: colorVal
-      ),
-      child: Icon(Icons.crop_square, color: colorVal),
-    );
-  }
-}
-
-//Configurations for the design of the buttons
-//class Buttons extends StatelessWidget {
-//  Widget build (BuildContext context){
-//    return ;
-//  }
-//}
-
-// The variables for each slice of Pi
 class PiData {
   final String item;
   final double expenditure;
+  final Color colorVal;
 
-  PiData(this.item, this.expenditure);
+  PiData(this.item, this.expenditure, this.colorVal);
 }
