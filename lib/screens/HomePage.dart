@@ -50,11 +50,13 @@ class _HomePageState extends State<HomePage> {
               child: PiChart(_createSampleData),
             ),
             Padding(padding: EdgeInsets.only(top: 15)),
-            FloatingActionButton(
-              onPressed: () {},
-              child: Icon(Icons.add),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16.0))),
-              backgroundColor: Colors.cyan,
+            Align(
+              alignment: FractionalOffset(0.9, 0.6),
+              child: FloatingActionButton( //relook into it
+                onPressed: () {},
+                child: Icon(Icons.add),
+                backgroundColor: Colors.cyan,
+              ),
             ),
             Padding(padding: EdgeInsets.only(top: 20)),
           ],
@@ -75,12 +77,12 @@ class PiChart extends StatelessWidget {
     return new charts.PieChart(
       seriesList,
       animate: true,
-      animationDuration: Duration(seconds: 3),
+      animationDuration: Duration(seconds: 2),
       behaviors: [
         new charts.DatumLegend(
           position: charts.BehaviorPosition.bottom,
           horizontalFirst: false,
-          cellPadding: new EdgeInsets.only(bottom: 4.0),
+          cellPadding: new EdgeInsets.only(left: 100.0 ,bottom: 4.0, top: 5.0),
           entryTextStyle: charts.TextStyleSpec(
             fontFamily: 'Rock Salt',
             fontSize: 20,
