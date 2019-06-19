@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 //Imports from own app
 import 'screens/HomePage.dart';
 import 'screens/SettingsPage.dart';
-
+import 'screens/CalendarPage.dart';
 
 void main() => runApp(MyApp());
 
@@ -28,7 +28,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int currentTab = 1;
 
   final List<Widget> list = [
-    SettingsPage(),
+    CalendarPage(),
     HomePage(),
     SettingsPage()
   ];
