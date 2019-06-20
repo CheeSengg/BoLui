@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "586480151586",
+    "firebase_url": "https://bolui-52d78.firebaseio.com",
+    "project_id": "bolui-52d78",
+    "storage_bucket": "bolui-52d78.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:586480151586:android:f75555fdf845102d",
+        "android_client_info": {
+          "package_name": "com.example.bolui"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "586480151586-ogek2i2gs1ef9kk4btb4pvmn1o7dhth5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfjE9Aq0NsSfXarcTiYbUd0ynOLcV3X0A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "586480151586-ogek2i2gs1ef9kk4btb4pvmn1o7dhth5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,4 +1,5 @@
 //Packages
+import 'package:bolui/util/EntryPopup.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
@@ -52,8 +53,10 @@ class _HomePageState extends State<HomePage> {
             Padding(padding: EdgeInsets.only(top: 15)),
             Align(
               alignment: FractionalOffset(0.9, 0.6),
-              child: FloatingActionButton( //relook into it
-                onPressed: () {},
+              child: FloatingActionButton( //Activates method called entry popup
+                onPressed: () async {
+                  final String currentTeam = await entryPopup(context);
+                },
                 child: Icon(Icons.add),
                 backgroundColor: Colors.cyan,
               ),
@@ -76,7 +79,7 @@ class PiChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return new charts.PieChart(
       seriesList,
-      animate: true,
+      animate: false,
       animationDuration: Duration(seconds: 2),
       behaviors: [
         new charts.DatumLegend(
