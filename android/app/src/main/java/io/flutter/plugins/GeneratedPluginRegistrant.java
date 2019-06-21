@@ -2,7 +2,6 @@ package io.flutter.plugins;
 
 import io.flutter.plugin.common.PluginRegistry;
 import com.builttoroam.devicecalendar.DeviceCalendarPlugin;
-import io.flutter.plugins.firebase.core.FirebaseCorePlugin;
 
 /**
  * Generated file. Do not edit.
@@ -13,7 +12,6 @@ public final class GeneratedPluginRegistrant {
       return;
     }
     DeviceCalendarPlugin.registerWith(registry.registrarFor("com.builttoroam.devicecalendar.DeviceCalendarPlugin"));
-    FirebaseCorePlugin.registerWith(registry.registrarFor("io.flutter.plugins.firebase.core.FirebaseCorePlugin"));
   }
 
   private static boolean alreadyRegisteredWith(PluginRegistry registry) {
