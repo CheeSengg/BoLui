@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'screens/HomePage.dart';
 import 'screens/SettingsPage.dart';
 import 'screens/CalendarPage.dart';
+import 'screens/loginPage.dart';
 
 void main() => runApp(MyApp());
 
@@ -24,12 +25,14 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int currentTab = 1;
+  var currentTab = 1;
 
   final List<Widget> list = [
     CalendarPage(),
+    //LoginPage(),
     HomePage(),
     SettingsPage()
+
   ];
 
   final List<String> header = [
