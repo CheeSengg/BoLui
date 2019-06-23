@@ -46,10 +46,9 @@ class _HomePageState extends State<HomePage> {
       child: Center(
         child: Column(
           children: <Widget>[
-            //PiChart Widget
             donutPi(),
             floatingActionBar(),
-//            ListView(),
+            spendingCategories(),
           ],
         ),
       ),
@@ -107,6 +106,42 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  //Configurations for ListView of the different spending entries
+  Widget spendingCategories(){
+    return Expanded(
+        child: ListView(
+          padding: const EdgeInsets.all(8.0),
+          children: <Widget>[
+            Container(
+              height: 50,
+              color: Colors.amber[600],
+              child: const Center(child: Text('Entry A')),
+            ),
+            Container(
+              height: 50,
+              color: Colors.amber[500],
+              child: const Center(child: Text('Entry B')),
+            ),
+            Container(
+              height: 50,
+              color: Colors.amber[100],
+              child: const Center(child: Text('Entry C')),
+            ),
+            Container(
+              height: 50,
+              color: Colors.amber[100],
+              child: const Center(child: Text('Entry D')),
+            ),
+            Container(
+              height: 50,
+              color: Colors.amber[100],
+              child: const Center(child: Text('Entry E')),
+            ),
+          ],
+        ),
+    );
+  }
 }
 
 // Configurations for the design of the PiChart
@@ -128,6 +163,7 @@ class PiChart extends StatelessWidget {
   }
 }
 
+//Parameters to create the PiChart
 class PiData {
   final String item;
   final double expenditure;
