@@ -1,6 +1,7 @@
 //Packages
 import 'package:bolui/util/EntryPopup.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart' as prefix0;
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
@@ -14,11 +15,24 @@ class _HomePageState extends State<HomePage> {
   //Should this variable be private? Think there will be data from other dart pages to update this.
   List<charts.Series<PiData, String>> _createSampleData;
 
+  // Random data for testing
+  final List<String> entries = <String>['A', 'B', 'C', 'D', 'E', 'F'];
+
+  // Random data for testing
+  final List<IconData> icons = <IconData>[
+    Icons.add,
+    Icons.assessment,
+    Icons.settings,
+    Icons.calendar_today,
+    Icons.crop_square,
+    Icons.favorite
+  ];
+
   // Hardcoded trial data (can be deleted)
   _generateData() {
     var sampleData = [
-      new PiData('Spending', 100.0, Colors.blue),
-      new PiData('Remaining', 50.0, Colors.blueAccent)
+      new PiData('Spending', 100.0, Colors.blue[300]),
+      new PiData('Remaining', 50.0, Colors.lightBlue[100])
     ];
 
     _createSampleData.add(
@@ -58,6 +72,58 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  //Configurations for the Scrolling View
+  Widget scrollingView() {
+    return NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return [
+            SliverAppBar(
+              pinned: false,
+              backgroundColor: Colors.white,
+              flexibleSpace: FlexibleSpaceBar(
+                collapseMode: CollapseMode.pin,
+                background: collapseWindow(),
+              ),
+              expandedHeight: 350.0,
+            )
+          ];
+        },
+        body: spendingCategories());
+  }
+
+  Widget collapseWindow() {
+    return Column(
+      children: <Widget>[
+        donutPi(),
+        Divider(),
+        Expanded(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              const Text(
+                '  SPENDING',
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+              new Text(
+                '\$100.00' + "  ",
+                textAlign: TextAlign.left,
+                textDirection: TextDirection.ltr,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   // Configurations for Container size of the PiChart
   // Configurations for the Text in the middle of PiChart
   Widget donutPi() {
@@ -70,19 +136,22 @@ class _HomePageState extends State<HomePage> {
             children: <Widget>[
               Padding(padding: EdgeInsets.only(bottom: 120)),
               Center(
-                child: Text(
-                  'Hi There',
+                child: new Text(
+                  '\$50.00',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 30, color: Colors.green),
+                  style: TextStyle(
+                    fontSize: 36,
+                    color: Colors.black,
+                  ),
                 ),
               ),
               Center(
-                child: Text(
-                  'This is the Second line',
+                child: const Text(
+                  'Left to spend',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.redAccent,
+                    fontSize: 14,
+                    color: Colors.black,
                   ),
                 ),
               )
@@ -95,55 +164,30 @@ class _HomePageState extends State<HomePage> {
 
   //Configurations for ListView of the different spending entries
   Widget spendingCategories() {
-    return ListView(
-      padding: const EdgeInsets.all(8.0),
-      children: <Widget>[
-        Container(
+    return ListView.separated(
+      padding: const EdgeInsets.only(top: 2.0, bottom: 2.0, left: 8.0),
+      itemCount: entries.length,
+      itemBuilder: (BuildContext context, int index) {
+        return Container(
           height: 50,
-          color: Colors.amber[600],
-          child: const Center(child: Text('Entry A')),
-        ),
-        Container(
-          height: 50,
-          color: Colors.amber[500],
-          child: const Center(child: Text('Entry B')),
-        ),
-        Container(
-          height: 50,
-          color: Colors.amber[100],
-          child: const Center(child: Text('Entry C')),
-        ),
-        Container(
-          height: 50,
-          color: Colors.amber[100],
-          child: const Center(child: Text('Entry D')),
-        ),
-        Container(
-          height: 50,
-          color: Colors.amber[100],
-          child: const Center(child: Text('Entry E')),
-        ),
-      ],
-    );
-  }
-
-  //Configurations for the Scrolling View
-  Widget scrollingView(){
-    return NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return [
-            SliverAppBar(
-              pinned: false,
-              backgroundColor: Colors.white,
-              flexibleSpace: FlexibleSpaceBar(
-                collapseMode: CollapseMode.pin,
-                background: donutPi(),
+          child: Row(
+            children: <Widget>[
+              Icon(icons[index]),
+              Padding(padding: EdgeInsets.only(right: 8.0)),
+              Expanded(
+                child: Text(
+                  'Entry ${entries[index]}',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontFamily: 'Roboto',
+                  ),
+                ),
               ),
-              expandedHeight: 300.0,
-            )
-          ];
-        },
-        body: spendingCategories()
+            ],
+          ),
+        );
+      },
+      separatorBuilder: (BuildContext context, int index) => const Divider(),
     );
   }
 }
@@ -159,7 +203,7 @@ class PiChart extends StatelessWidget {
     return new charts.PieChart(
       seriesList,
       animate: true,
-      animationDuration: Duration(seconds: 2),
+      animationDuration: Duration(milliseconds: 500),
       defaultRenderer: charts.ArcRendererConfig(
         arcWidth: 10,
       ),
