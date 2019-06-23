@@ -18,8 +18,8 @@ class _HomePageState extends State<HomePage> {
   // Hardcoded trial data (can be deleted)
   _generateData(){
     var sampleData = [
-      new PiData('Spending', 100.0, Colors.red),
-      new PiData('Remaining', 50.0, Colors.green)
+      new PiData('Spending', 100.0, Colors.blue),
+      new PiData('Remaining', 50.0, Colors.blueAccent)
     ];
 
     _createSampleData.add(
@@ -47,23 +47,41 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: <Widget>[
             //PiChart Widget
-            Expanded(
-              child: PiChart(_createSampleData),
-            ),
-            Padding(padding: EdgeInsets.only(top: 15)),
-            Align(
-              alignment: FractionalOffset(0.9, 0.6),
-              child: FloatingActionButton( //Activates method called entry popup
-                onPressed: () async {
-                  final String currentTeam = await entryPopup(context);
-                },
-                child: Icon(Icons.add),
-                backgroundColor: Colors.cyan,
-              ),
-            ),
-            Padding(padding: EdgeInsets.only(top: 20)),
+            donutPi(),
+            floatingActionBar(),
+//            ListView(),
           ],
         ),
+      ),
+    );
+  }
+
+  // Configurations for Container size of the PiChart
+  Widget donutPi(){
+    return Container(
+        height: 300,
+        child: Stack(children: <Widget>[
+          PiChart(_createSampleData),
+          Column(
+            children: <Widget>[
+              Expanded(
+                child: Center(
+                    child: )),
+          ],),
+        ],)
+    );
+  }
+
+  // Configurations for Floating Action Bar
+  Widget floatingActionBar(){
+    return Align(
+      alignment: FractionalOffset(0.9, 0.6),
+      child: FloatingActionButton( //Activates method called entry popup
+        onPressed: () async {
+          final String currentTeam = await entryPopup(context);
+        },
+        child: Icon(Icons.add),
+        backgroundColor: Colors.cyan,
       ),
     );
   }
@@ -79,19 +97,11 @@ class PiChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return new charts.PieChart(
       seriesList,
-      animate: false,
+      animate: true,
       animationDuration: Duration(seconds: 2),
-      behaviors: [
-        new charts.DatumLegend(
-          position: charts.BehaviorPosition.bottom,
-          horizontalFirst: false,
-          cellPadding: new EdgeInsets.only(left: 100.0 ,bottom: 4.0, top: 5.0),
-          entryTextStyle: charts.TextStyleSpec(
-            fontFamily: 'Rock Salt',
-            fontSize: 20,
-          )
-        )
-      ],
+      defaultRenderer: charts.ArcRendererConfig(
+        arcWidth: 10,
+      ),
     );
   }
 }

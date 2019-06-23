@@ -24,8 +24,8 @@ dependencies:
   device_calendar: ^0.1.1
 
 # --- Shaun's Dependencies ---
-  firebase_core: ^0.4.0  # add dependency for Firebase Core
-  firebase_auth: ^0.11.1+7
+ # firebase_core: ^0.4.0  # add dependency for Firebase Core
+  #firebase_auth: ^0.11.1+7
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the Cupertino Icons class for iOS style icons.

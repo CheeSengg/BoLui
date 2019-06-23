@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 //Imports from own app
 import 'screens/HomePage.dart';
 import 'screens/SettingsPage.dart';
-import 'screens/CalendarPage.dart';
 import 'screens/loginPage.dart';
 
 void main() => runApp(MyApp());
@@ -25,19 +24,16 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  var currentTab = 1;
+  var currentTab = 0;
 
   final List<Widget> list = [
-    CalendarPage(),
     //LoginPage(),
     HomePage(),
     SettingsPage()
-
   ];
 
   final List<String> header = [
     "Home",
-    "Stats",
     "Settings"
   ];
 
@@ -54,18 +50,18 @@ class _MyHomePageState extends State<MyHomePage> {
           setState(() => currentTab = index);
         },
         items: [
-          BottomNavigationBarItem(
-            icon: new Icon(Icons.calendar_today),
-            title: new Text('Calendar'),
-          ),
-          BottomNavigationBarItem(
-            icon: new Icon(Icons.assessment),
-            title: new Text('Stats'),
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.settings), title: Text('Settings'))
+          navigationBarItem(Icons.assessment, 'Home'),
+          navigationBarItem(Icons.settings, 'Settings')
         ],
       ),
+    );
+  }
+
+
+  // Configuration for the BottomNavigationBarItem
+  BottomNavigationBarItem navigationBarItem(IconData icon, String text){return BottomNavigationBarItem(
+      icon: new Icon(icon),
+      title: new Text(text)
     );
   }
 }

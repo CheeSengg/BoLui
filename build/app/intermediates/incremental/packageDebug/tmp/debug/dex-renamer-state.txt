@@ -1,4 +1,4 @@
-#Fri Jun 21 16:17:24 SGT 2019
-base.0=/Users/Shaun/Documents/Development/BoLui/build/app/intermediates/transforms/dexMerger/debug/0
+#Sun Jun 23 12:14:31 SGT 2019
+base.0=C\:\\Users\\brian\\Desktop\\Orbital Project\\BoLui\\build\\app\\intermediates\\transforms\\dexMerger\\debug\\0
 path.0=classes.dex
 renamed.0=classes.dex
