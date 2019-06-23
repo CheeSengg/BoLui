@@ -27,12 +27,13 @@ class _MyHomePageState extends State<MyHomePage> {
   var currentTab = 0;
 
   final List<Widget> list = [
-    //LoginPage(),
+    LoginPage(),
     HomePage(),
     SettingsPage()
   ];
 
   final List<String> header = [
+    "Login",
     "Home",
     "Settings"
   ];
@@ -50,6 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
           setState(() => currentTab = index);
         },
         items: [
+          navigationBarItem(Icons.assessment, 'Login'),
           navigationBarItem(Icons.assessment, 'Home'),
           navigationBarItem(Icons.settings, 'Settings')
         ],

@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Sun Jun 23 13:00:12 SGT 2019
+#Sun Jun 23 13:48:48 SGT 2019
 4.path=flutter_assets/AssetManifest.json
 8.set=DEX
 6.path=flutter_assets/LICENSE
