@@ -1,9 +1,4 @@
-<<<<<<< HEAD
-#Sun Jun 23 12:14:11 SGT 2019
-base.0=/Users/Shaun/Documents/Development/BoLui/build/app/intermediates/transforms/dexMerger/debug/0
-=======
-#Sun Jun 23 12:14:31 SGT 2019
+#Sun Jun 23 12:47:42 SGT 2019
 base.0=C\:\\Users\\brian\\Desktop\\Orbital Project\\BoLui\\build\\app\\intermediates\\transforms\\dexMerger\\debug\\0
->>>>>>> 85b3b3a6bf53d4d2efb22e66b0c0649c0f787822
 path.0=classes.dex
 renamed.0=classes.dex

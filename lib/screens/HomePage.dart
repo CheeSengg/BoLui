@@ -57,18 +57,40 @@ class _HomePageState extends State<HomePage> {
   }
 
   // Configurations for Container size of the PiChart
+  // Configurations for the Text in the middle of PiChart
   Widget donutPi(){
     return Container(
         height: 300,
-        child: Stack(children: <Widget>[
-          PiChart(_createSampleData),
-          Column(
-            children: <Widget>[
-              Expanded(
-                child: Center(
-                    child: )),
-          ],),
-        ],)
+        child: Stack(
+          children: <Widget>[
+            PiChart(_createSampleData),
+            Column(
+              children: <Widget>[
+                Padding(padding: EdgeInsets.only(bottom: 120)),
+                Center(
+                  child: Text(
+                    'Hi There',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 30,
+                      color: Colors.green
+                    ),
+                  ),
+                ),
+                Center(
+                  child: Text(
+                    'This is the Second line',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.redAccent,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ],
+        ),
     );
   }
 
