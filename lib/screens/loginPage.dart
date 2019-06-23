@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+fluimport 'package:firebase_auth/firebase_auth.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -12,7 +12,7 @@ class _LoginPageState extends State<LoginPage> {
   String _email;
   String _password;
 
-  void validateAndSave() {
+  bool validateAndSave() {
     final form = formKey.currentState;
     if (form.validate()) {
       form.save();
