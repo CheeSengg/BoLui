@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'screens/HomePage.dart';
 import 'screens/SettingsPage.dart';
 import 'screens/loginPage.dart';
-import 'util/EntryPopup.dart';
+import 'screens/root_Page.dart';
+import 'util/auth.dart';
+import 'screens/new_entry.dart';
 
 void main() => runApp(MyApp());
 
@@ -34,7 +36,8 @@ class _MyHomePageState extends State<MyHomePage> {
   var currentTab = 0;
 
   final List<Widget> list = [
-    LoginPage(),
+    LoginPage(auth: new Auth()),
+   // EntryPage(),
     HomePage(),
     SettingsPage()
   ];

@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -115,7 +114,7 @@ class _Database extends State<Database> {
   void createData() async {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      DocumentReference ref = await db.collection('CRUD').add({'name': '$name 😎', 'todo': randomTodo()});
+      DocumentReference ref = await db.collection('CRUD').add({'name': '$name 😎', 'todo': ''});
       setState(() => id = ref.documentID);
       print(ref.documentID);
     }
@@ -133,25 +132,5 @@ class _Database extends State<Database> {
   void deleteData(DocumentSnapshot doc) async {
     await db.collection('CRUD').document(doc.documentID).delete();
     setState(() => id = null);
-  }
-
-  String randomTodo() {
-    final randomNumber = Random().nextInt(4);
-    String todo;
-    switch (randomNumber) {
-      case 1:
-        todo = 'Like and subscribe 💩';
-        break;
-      case 2:
-        todo = 'Twitter @robertbrunhage 🤣';
-        break;
-      case 3:
-        todo = 'Patreon in the description 🤗';
-        break;
-      default:
-        todo = 'Leave a comment 🤓';
-        break;
-    }
-    return todo;
   }
 }
