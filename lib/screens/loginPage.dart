@@ -101,6 +101,7 @@ class _LoginPageState extends State<LoginPage> {
   List<Widget> buildSubmitButtons() {
     if (_formType == FormType.login) {
       return [
+        new Padding(padding: EdgeInsets.only(bottom: 30.0),),
         new RaisedButton(
           child: new Text('Login', style: new TextStyle(fontSize: 20.0)),
           onPressed: validateAndSubmit,
@@ -113,6 +114,7 @@ class _LoginPageState extends State<LoginPage> {
       ];
     } else {
       return [
+        new Padding(padding: EdgeInsets.only(bottom: 30.0),),
         new RaisedButton(
           child: new Text('Create an account', style: new TextStyle(fontSize: 20.0)),
           onPressed: validateAndSubmit,
