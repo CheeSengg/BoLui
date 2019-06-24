@@ -63,7 +63,7 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             icon: new Icon(Icons.add),
             onPressed: () async {
-              final String currentTeam = await entryPopup(context);
+            //  final String currentTeam = await entryPopup(context);
             },
           ),
         ],

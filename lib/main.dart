@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'screens/HomePage.dart';
 import 'screens/SettingsPage.dart';
 import 'screens/loginPage.dart';
+import 'util/EntryPopup.dart';
 
 void main() => runApp(MyApp());
 
@@ -29,6 +30,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
   var currentTab = 0;
 
   final List<Widget> list = [
@@ -69,3 +71,4 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
