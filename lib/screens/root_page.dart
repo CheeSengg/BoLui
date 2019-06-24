@@ -52,6 +52,12 @@ class _RootPageState extends State<RootPage>{
     });
   }
 
+  void _signedOut(){
+    setState(() {
+      authStatus = AuthStatus.notSignedIn;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     switch (authStatus) {
@@ -63,20 +69,58 @@ class _RootPageState extends State<RootPage>{
         );
 
       case AuthStatus.signedIn:
-        return Scaffold(
-          body: list[currentTab],
-          bottomNavigationBar: BottomNavigationBar(
-            currentIndex: currentTab,
-            onTap: (int index) {
-              setState(() => currentTab = index);
-            },
-            items: [
-              navigationBarItem(Icons.assessment, 'Home'),
-              navigationBarItem(Icons.settings, 'Settings')
-            ],
-          ),
-        );
+        switch(currentTab){
+          case 0:
+          return Scaffold(
+            body: HomePage(),
+            bottomNavigationBar: BottomNavigationBar(
+              currentIndex: currentTab,
+              onTap: (int index){
+                setState(() {
+                  currentTab = index;
+                });
+              },
+              items: [
+                navigationBarItem(Icons.assessment, 'Home'),
+                navigationBarItem(Icons.settings, 'Settings')
+              ],
+            ),
+          );
+          case 1:
+            return Scaffold(
+              body: SettingsPage(auth: widget.auth, onSignedOut: _signedOut,),
+              bottomNavigationBar: BottomNavigationBar(
+                currentIndex: currentTab,
+                onTap: (int index){
+                  setState(() {
+                    currentTab = index;
+                  });
+                },
+                items: [
+                  navigationBarItem(Icons.assessment, 'Home'),
+                  navigationBarItem(Icons.settings, 'Settings')
+                ],
+              ),
+            );
+        }
+
+        //This code was removed due to the fact that you cannot pass parameters into setting in final.
+//        return Scaffold(
+//          body: list[currentTab],
+//          bottomNavigationBar: BottomNavigationBar(
+//            currentIndex: currentTab,
+//            onTap: (int index) {
+//              setState(() => currentTab = index);
+//            },
+//            items: [
+//              navigationBarItem(Icons.assessment, 'Home'),
+//              navigationBarItem(Icons.settings, 'Settings')
+//            ],
+//          ),
+//        );
     }
+
+    return null;
   }
 
 

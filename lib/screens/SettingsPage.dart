@@ -1,15 +1,42 @@
 //Packages
 import 'package:flutter/material.dart';
+import 'package:bolui/util/auth.dart';
 
 class SettingsPage extends StatelessWidget {
+  SettingsPage({this.auth, this.onSignedOut});
+  final BaseAuth auth;
+  final VoidCallback onSignedOut;
+
+  void _signedOut() async{
+    try {
+      await auth.signOut();
+      onSignedOut();
+    } catch(e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('SETTING',
+          style: TextStyle(
+            fontSize: 24
+          ),
+        ),
+      ),
+      body: ListView(
         children: <Widget>[
-          PiChart(),
+          ListTile(
+            onTap: _signedOut,
+            title: Text(
+              'LOG OUT',
+              style: TextStyle(
+                  fontSize: 16
+              ),
+            ),
+          ),
         ],
       ),
     );
