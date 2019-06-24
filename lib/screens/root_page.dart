@@ -41,7 +41,7 @@ class _RootPageState extends State<RootPage>{
     super.initState();
     widget.auth.currentUser().then((userId){
       setState(() {
-//        authStatus = userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
+        authStatus = userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
       });
     });
   }
@@ -53,6 +53,7 @@ class _RootPageState extends State<RootPage>{
   }
 
   void _signedOut(){
+    currentTab = 0;
     setState(() {
       authStatus = AuthStatus.notSignedIn;
     });
