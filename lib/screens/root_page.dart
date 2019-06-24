@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:bolui/util/auth.dart';
-import 'package:bolui/screens/HomePage.dart';
-import 'package:bolui/screens/SettingsPage.dart';
+import 'package:bolui/screens/home_page.dart';
+import 'package:bolui/screens/setitings_page.dart';
 import 'package:bolui/screens/loginPage.dart';
 
 
@@ -47,6 +47,7 @@ class _RootPageState extends State<RootPage>{
   }
 
   void _signedIn(){
+    currentTab = 0;
     setState(() {
       authStatus = AuthStatus.signedIn;
     });

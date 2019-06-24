@@ -3,12 +3,12 @@ import 'package:bolui/screens/root_page.dart' as prefix0;
 import 'package:flutter/material.dart';
 
 //Imports from own app
-import 'screens/HomePage.dart';
-import 'screens/SettingsPage.dart';
+import 'screens/home_page.dart';
+import 'screens/setitings_page.dart';
 import 'screens/loginPage.dart';
 import 'screens/root_Page.dart';
 import 'util/auth.dart';
-import 'screens/new_entry.dart';
+
 
 void main() => runApp(MyApp());
 
