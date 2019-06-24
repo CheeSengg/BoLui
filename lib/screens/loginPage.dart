@@ -1,12 +1,14 @@
 //Packages
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 //Own imports
 import '../util/auth.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({this.auth});
+  LoginPage({this.auth, this.onSignedIn});
   final BaseAuth auth;
+  final VoidCallback onSignedIn;
 
   @override
   _LoginPageState createState() => new _LoginPageState();
@@ -55,6 +57,7 @@ class _LoginPageState extends State<LoginPage> {
           String userId = await widget.auth.createUserWithEmailAndPassword(_email, _password);
           print('registered user: $userId');
         }
+        widget.onSignedIn();
       } catch (e) {
         print('error $e');
       }

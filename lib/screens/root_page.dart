@@ -22,6 +22,18 @@ enum AuthStatus{
 
 class _RootPageState extends State<RootPage>{
 
+  var currentTab = 0;
+
+  final List<Widget> list = [
+    HomePage(),
+    SettingsPage()
+  ];
+
+  final List<String> header = [
+    "Home",
+    "Settings"
+  ];
+
   AuthStatus authStatus = AuthStatus.notSignedIn;
 
   @override
@@ -29,30 +41,27 @@ class _RootPageState extends State<RootPage>{
     super.initState();
     widget.auth.currentUser().then((userId){
       setState(() {
-        authStatus = userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
+//        authStatus = userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
       });
     });
   }
 
-  var currentTab = 0;
-
-  final List<Widget> list = [
-    LoginPage(),
-    HomePage(),
-    SettingsPage()
-  ];
-
-  final List<String> header = [
-    "Login",
-    "Home",
-    "Settings"
-  ];
+  void _signedIn(){
+    setState(() {
+      authStatus = AuthStatus.signedIn;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     switch (authStatus) {
+
       case AuthStatus.notSignedIn:
-        return new LoginPage(auth: widget.auth);
+        return new LoginPage(
+          auth: widget.auth,
+          onSignedIn: _signedIn,
+        );
+
       case AuthStatus.signedIn:
         return Scaffold(
           body: list[currentTab],
@@ -62,7 +71,6 @@ class _RootPageState extends State<RootPage>{
               setState(() => currentTab = index);
             },
             items: [
-              navigationBarItem(Icons.assessment, 'Login'),
               navigationBarItem(Icons.assessment, 'Home'),
               navigationBarItem(Icons.settings, 'Settings')
             ],

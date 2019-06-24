@@ -1,4 +1,5 @@
 //Packages
+import 'package:bolui/screens/root_page.dart' as prefix0;
 import 'package:flutter/material.dart';
 
 //Imports from own app
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
         accentColor:  Colors.cyan[100],
       ),
       debugShowCheckedModeBanner: false,
-      home: MyHomePage(),
+      home: RootPage(auth: Auth()),
     );
   }
 }
