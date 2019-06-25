@@ -19,7 +19,6 @@ class RootPage extends StatefulWidget {
 enum AuthStatus { notSignedIn, signedIn }
 
 class _RootPageState extends State<RootPage> {
-  var userId;
   var currentTab = 0;
 
   final List<Widget> list = [HomePage(), SettingsPage()];
@@ -66,22 +65,19 @@ class _RootPageState extends State<RootPage> {
       case AuthStatus.signedIn:
         switch (currentTab) {
           case 0:
-            return userInfo(
-              userId: userId,
-              child: Scaffold(
-                body: HomePage(),
-                bottomNavigationBar: BottomNavigationBar(
-                  currentIndex: currentTab,
-                  onTap: (int index) {
-                    setState(() {
-                      currentTab = index;
-                    });
-                  },
-                  items: [
-                    navigationBarItem(Icons.assessment, 'Home'),
-                    navigationBarItem(Icons.settings, 'Settings')
-                  ],
-                ),
+            return Scaffold(
+              body: HomePage(),
+              bottomNavigationBar: BottomNavigationBar(
+                currentIndex: currentTab,
+                onTap: (int index) {
+                  setState(() {
+                    currentTab = index;
+                  });
+                },
+                items: [
+                  navigationBarItem(Icons.assessment, 'Home'),
+                  navigationBarItem(Icons.settings, 'Settings')
+                ],
               ),
             );
           case 1:

@@ -1,4 +1,5 @@
-import 'package:bolui/util/user_info.dart';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -11,8 +12,6 @@ class EntryPage extends StatefulWidget {
 }
 //TODO: include time based entry
 class _EntryPage extends State<EntryPage> {
-  var user;
-
   String id;
   final db = Firestore.instance;
   final _formKey = GlobalKey<FormState>();
@@ -22,7 +21,6 @@ class _EntryPage extends State<EntryPage> {
 
   @override
   Widget build(BuildContext context) {
-    user = userInfo.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('New Entry'),
@@ -95,13 +93,12 @@ class _EntryPage extends State<EntryPage> {
 
   void createData() async {
     print("created data");
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      DocumentReference ref =
-          await db.collection('Spending').add({'name': '$name', 'category': '$category', 'amount': '$amount'});
-      setState(() => id = ref.documentID); //Success button? close page?
-      print(ref.documentID);
-      print(user);
+      db.collection('Spending').document(user.uid).setData({'name': '$name', 'category': '$category', 'amount': '$amount'});
+    //  setState(() => id = ref.documentID); //Success button? close page?
+      //print(ref.documentID);
     }
   }
 }

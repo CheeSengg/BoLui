@@ -21,7 +21,6 @@ class _LoginPageState extends State<LoginPage> {
   String _email;
   String _password;
   FormType _formType = FormType.login;
-  String userId;
 
   bool validateAndSave() {
     final form = formKey.currentState;
@@ -52,9 +51,9 @@ class _LoginPageState extends State<LoginPage> {
     if (validateAndSave()) {
       try {
         if (_formType == FormType.login) {
-          userId = await widget.auth.signInWithEmailAndPassword(_email, _password);
+          var userId = await widget.auth.signInWithEmailAndPassword(_email, _password);
         } else {
-          userId = await widget.auth.createUserWithEmailAndPassword(_email, _password);
+          var userId = await widget.auth.createUserWithEmailAndPassword(_email, _password);
         }
         widget.onSignedIn();
       } catch (e) {
