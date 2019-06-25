@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => EntryPage()),
+                MaterialPageRoute(builder: (context) => new EntryPage()),
               );
             },
           ),
@@ -96,6 +96,7 @@ class _HomePageState extends State<HomePage> {
         body: spendingCategories());
   }
 
+  //Widget tree for all components
   Widget collapseWindow() {
     return Column(
       children: <Widget>[

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class userInfo extends InheritedWidget {
   final userId;
   var monthlyAmount;
@@ -12,7 +11,7 @@ class userInfo extends InheritedWidget {
   }
 
   @override
-  bool updateShouldNotify( old) {
+  bool updateShouldNotify(old) {
     return true;
   }
 }

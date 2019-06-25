@@ -32,8 +32,7 @@ class _RootPageState extends State<RootPage> {
     super.initState();
     widget.auth.currentUser().then((userId) {
       setState(() {
-        authStatus =
-            userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
+        authStatus = userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
         print(userId);
       });
     });
@@ -103,19 +102,19 @@ class _RootPageState extends State<RootPage> {
         }
 
       //This code was removed due to the fact that you cannot pass parameters into setting in final.
-//        return Scaffold(
-//          body: list[currentTab],
-//          bottomNavigationBar: BottomNavigationBar(
-//            currentIndex: currentTab,
-//            onTap: (int index) {
-//              setState(() => currentTab = index);
-//            },
-//            items: [
-//              navigationBarItem(Icons.assessment, 'Home'),
-//              navigationBarItem(Icons.settings, 'Settings')
-//            ],
-//          ),
-//        );
+////        return Scaffold(
+////          body: list[currentTab],
+////          bottomNavigationBar: BottomNavigationBar(
+////            currentIndex: currentTab,
+////            onTap: (int index) {
+////              setState(() => currentTab = index);
+////            },
+////            items: [
+////              navigationBarItem(Icons.assessment, 'Home'),
+////              navigationBarItem(Icons.settings, 'Settings')
+////            ],
+////          ),
+////        );
     }
 
     return null;
