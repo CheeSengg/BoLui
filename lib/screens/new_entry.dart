@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
@@ -19,6 +20,43 @@ class _EntryPage extends State<EntryPage> {
   String name;
   String category;
   double amount;
+
+  //Hardcoded Data
+  List<DropdownMenuItem<String>> list = [];
+  List<String> generateList = ['Entertainment', 'Transport', 'Food', 'Others'];
+  String selected;
+  //function to add items into list
+  //TODO: once the categories have been set write to load a list.
+  void loadData(){
+    list = [];
+    list = generateList.map((val) => new DropdownMenuItem(
+        child: new Text(val), value: val,)).toList();
+
+    selected = generateList.last;
+//    list.add(new DropdownMenuItem(
+//      child: Text('Entertainment'),
+//      value: 1,
+//    ));
+//    list.add(new DropdownMenuItem(
+//      child: Text('Transport'),
+//      value: 2,
+//    ));
+//    list.add(new DropdownMenuItem(
+//      child: Text('Food'),
+//      value: 3,
+//    ));
+//    list.add(new DropdownMenuItem(
+//      child: Text('Others'),
+//      value: 4,
+//    ));
+//    selected = 4;
+  }
+
+  @override
+  void initState() {
+    loadData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,41 +79,34 @@ class _EntryPage extends State<EntryPage> {
   List<Widget> buildInputs() {
     return [
       Padding(padding: EdgeInsets.only(bottom: 10),),
-      inputBox('Name', 'Please do not leave it empty'),
+      listDrop(),
+//      inputBox('Category'),
       Padding(padding: EdgeInsets.only(bottom: 10),),
-      inputBox('Category', 'Please do not leave it empty'),
+      inputBox('Description'),
       Padding(padding: EdgeInsets.only(bottom: 10),),
-      new TextFormField(
-        inputFormatters: [
-          WhitelistingTextInputFormatter.digitsOnly,
-          new CurrencyInputFormatter(),
-        ],
-        decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-          hintText: 'Amount',
-          fillColor: Colors.grey[300],
-          filled: true,
-        ),
-        keyboardType: TextInputType.number,
-        validator: (value) {
-          if (value.isEmpty) {
-            return 'Please do not leave it empty';
-          }
-        },
-        onSaved: (value) => amount = double.parse(value),
-      ),
+      numberField('Amount'),
       Padding(padding: EdgeInsets.only(bottom: 10),),
-      new RaisedButton(
-        onPressed: createData,
-        child: Text('Create', style: TextStyle(color: Colors.white)),
-        color: Colors.green,
-      ),
+      button()
     ];
   }
 
-  // Configurations for textInputFields
-  Widget inputBox(String hintText, String validator) {
+  Widget listDrop(){
+    return Container(
+      child: new DropdownButton(
+        value: selected,
+        items: list,
+        onChanged: (value) {
+          selected = value;
+          setState(() {
+
+          });
+        },
+      )
+    );
+  }
+
+  // Configurations for textInputField
+  Widget inputBox(String hintText) {
     return new TextFormField(
       decoration: InputDecoration(
         contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
@@ -86,13 +117,45 @@ class _EntryPage extends State<EntryPage> {
       ),
       validator: (value) {
         if (value.isEmpty) {
-          return validator;
+          return 'Please do not leave it empty';
         }
       },
       onSaved: (value) => name = value,
     );
   }
 
+  // Configurations for numberInputField
+  Widget numberField(String hintText){
+    return new TextFormField(
+      inputFormatters: [
+        WhitelistingTextInputFormatter.digitsOnly,
+        new CurrencyInputFormatter(),
+      ],
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
+        hintText: hintText,
+        fillColor: Colors.grey[300],
+        filled: true,
+      ),
+      keyboardType: TextInputType.number,
+      validator: (value) {
+        if (value.isEmpty) {
+          return 'Please do not leave it empty';
+        }
+      },
+      onSaved: (value) => amount = double.parse(value),
+    );
+  }
+
+  // Configurations for Button
+  Widget button(){
+    return new RaisedButton(
+      onPressed: createData,
+      child: Text('Add', style: TextStyle(color: Colors.white)),
+      color: Colors.green,
+    );
+  }
 
   void createData() async {
     print("created data");
