@@ -21,6 +21,7 @@ class _LoginPageState extends State<LoginPage> {
   String _email;
   String _password;
   FormType _formType = FormType.login;
+  String userId;
 
   bool validateAndSave() {
     final form = formKey.currentState;
@@ -46,16 +47,14 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-
+//TODO: Settle await issue that throws an exception
   void validateAndSubmit() async {
     if (validateAndSave()) {
       try {
         if (_formType == FormType.login) {
-          String userId = await widget.auth.signInWithEmailAndPassword(_email, _password);
-          print('signed in: $userId');
+          userId = await widget.auth.signInWithEmailAndPassword(_email, _password);
         } else {
-          String userId = await widget.auth.createUserWithEmailAndPassword(_email, _password);
-          print('registered user: $userId');
+          userId = await widget.auth.createUserWithEmailAndPassword(_email, _password);
         }
         widget.onSignedIn();
       } catch (e) {
@@ -63,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
       }
     }
   }
-
+//TODO Beautify login in page + include google sign in
   @override
   Widget build(BuildContext context) {
     return new Scaffold(

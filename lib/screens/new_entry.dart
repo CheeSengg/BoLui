@@ -1,5 +1,7 @@
+import 'package:bolui/util/user_info.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class EntryPage extends StatefulWidget {
   @override
@@ -7,8 +9,10 @@ class EntryPage extends StatefulWidget {
     return _EntryPage();
   }
 }
-
+//TODO: include time based entry
 class _EntryPage extends State<EntryPage> {
+  var user;
+
   String id;
   final db = Firestore.instance;
   final _formKey = GlobalKey<FormState>();
@@ -18,6 +22,7 @@ class _EntryPage extends State<EntryPage> {
 
   @override
   Widget build(BuildContext context) {
+    user = userInfo.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('New Entry'),
@@ -96,6 +101,7 @@ class _EntryPage extends State<EntryPage> {
           await db.collection('Spending').add({'name': '$name', 'category': '$category', 'amount': '$amount'});
       setState(() => id = ref.documentID); //Success button? close page?
       print(ref.documentID);
+      print(user);
     }
   }
 }

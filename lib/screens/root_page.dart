@@ -1,59 +1,53 @@
+import 'package:bolui/util/user_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:bolui/util/auth.dart';
 import 'package:bolui/screens/home_page.dart';
-import 'package:bolui/screens/setitings_page.dart';
-import 'package:bolui/screens/loginPage.dart';
+import 'package:bolui/screens/settings_page.dart';
+import 'package:bolui/screens/login_page.dart';
 
-
-class RootPage extends StatefulWidget{
-  RootPage({this.auth});
+class RootPage extends StatefulWidget {
+  RootPage(
+      {this.auth}); //TODO: What does this mean ah? are the info from here passed out?
   final BaseAuth auth;
 
   @override
   State<StatefulWidget> createState() => new _RootPageState();
 }
 
-enum AuthStatus{
-  notSignedIn,
-  signedIn
-}
+enum AuthStatus { notSignedIn, signedIn }
 
-class _RootPageState extends State<RootPage>{
-
+class _RootPageState extends State<RootPage> {
+  var userId;
   var currentTab = 0;
 
-  final List<Widget> list = [
-    HomePage(),
-    SettingsPage()
-  ];
+  final List<Widget> list = [HomePage(), SettingsPage()];
 
-  final List<String> header = [
-    "Home",
-    "Settings"
-  ];
+  final List<String> header = ["Home", "Settings"];
 
   AuthStatus authStatus = AuthStatus.notSignedIn;
 
   @override
   void initState() {
     super.initState();
-    widget.auth.currentUser().then((userId){
+    widget.auth.currentUser().then((userId) {
       setState(() {
-        authStatus = userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
+        authStatus =
+            userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
+        print(userId);
       });
     });
   }
 
-  void _signedIn(){
+  void _signedIn() {
     currentTab = 0;
     setState(() {
       authStatus = AuthStatus.signedIn;
     });
   }
 
-  void _signedOut(){
+  void _signedOut() {
     currentTab = 0;
     setState(() {
       authStatus = AuthStatus.notSignedIn;
@@ -63,7 +57,6 @@ class _RootPageState extends State<RootPage>{
   @override
   Widget build(BuildContext context) {
     switch (authStatus) {
-
       case AuthStatus.notSignedIn:
         return new LoginPage(
           auth: widget.auth,
@@ -71,29 +64,36 @@ class _RootPageState extends State<RootPage>{
         );
 
       case AuthStatus.signedIn:
-        switch(currentTab){
+        switch (currentTab) {
           case 0:
-          return Scaffold(
-            body: HomePage(),
-            bottomNavigationBar: BottomNavigationBar(
-              currentIndex: currentTab,
-              onTap: (int index){
-                setState(() {
-                  currentTab = index;
-                });
-              },
-              items: [
-                navigationBarItem(Icons.assessment, 'Home'),
-                navigationBarItem(Icons.settings, 'Settings')
-              ],
-            ),
-          );
+            return userInfo(
+              userId: userId,
+              child: Scaffold(
+                body: HomePage(),
+                bottomNavigationBar: BottomNavigationBar(
+                  currentIndex: currentTab,
+                  onTap: (int index) {
+                    setState(() {
+                      currentTab = index;
+                    });
+                  },
+                  items: [
+                    navigationBarItem(Icons.assessment, 'Home'),
+                    navigationBarItem(Icons.settings, 'Settings')
+                  ],
+                ),
+              ),
+            );
           case 1:
+            //add auth here?
             return Scaffold(
-              body: SettingsPage(auth: widget.auth, onSignedOut: _signedOut,),
+              body: SettingsPage(
+                auth: widget.auth,
+                onSignedOut: _signedOut,
+              ),
               bottomNavigationBar: BottomNavigationBar(
                 currentIndex: currentTab,
-                onTap: (int index){
+                onTap: (int index) {
                   setState(() {
                     currentTab = index;
                   });
@@ -106,7 +106,7 @@ class _RootPageState extends State<RootPage>{
             );
         }
 
-        //This code was removed due to the fact that you cannot pass parameters into setting in final.
+      //This code was removed due to the fact that you cannot pass parameters into setting in final.
 //        return Scaffold(
 //          body: list[currentTab],
 //          bottomNavigationBar: BottomNavigationBar(
@@ -125,12 +125,8 @@ class _RootPageState extends State<RootPage>{
     return null;
   }
 
-
-    // Configuration for the BottomNavigationBarItem
-  BottomNavigationBarItem navigationBarItem(IconData icon, String text){
-    return BottomNavigationBarItem(
-        icon: new Icon(icon),
-        title: new Text(text)
-    );
+  // Configuration for the BottomNavigationBarItem
+  BottomNavigationBarItem navigationBarItem(IconData icon, String text) {
+    return BottomNavigationBarItem(icon: new Icon(icon), title: new Text(text));
   }
 }

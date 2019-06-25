@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 //Imports from own app
 import 'screens/home_page.dart';
-import 'screens/setitings_page.dart';
-import 'screens/loginPage.dart';
+import 'screens/settings_page.dart';
+import 'screens/login_page.dart';
 import 'screens/root_Page.dart';
 import 'util/auth.dart';
 
