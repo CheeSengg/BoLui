@@ -158,12 +158,13 @@ class _EntryPage extends State<EntryPage> {
   }
 
   void createData() async {
-    print("created data");
+    var date = DateTime.parse(DateTime.now().toString());
+    var formattedDate = "${date.day}-${date.month}-${date.year}";
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      db.collection('Spending').document(user.uid).setData(
-          {'name': '$name', 'category': '$category', 'amount': '$amount'});
+      db.collection('Users').document(user.uid).add(
+          {'name': '$name', 'category': '$category', 'amount': '$amount', 'date': '$formattedDate'});
       Navigator.pop(context);
       //print(ref.documentID);
     }
