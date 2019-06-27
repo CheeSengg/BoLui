@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:bolui/util/auth.dart';
 import 'new_entry.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -16,6 +18,7 @@ class _HomePageState extends State<HomePage> {
   //The Variable that stores all the collection of PiData
   //Should this variable be private? Think there will be data from other dart pages to update this.
   List<charts.Series<PiData, String>> _createSampleData;
+  final db = Firestore.instance;
 
   // Random data for testing
   final List<String> entries = <String>['A', 'B', 'C', 'D', 'E', 'F'];
@@ -31,7 +34,8 @@ class _HomePageState extends State<HomePage> {
   ];
 
   // Hardcoded trial data (can be deleted)
-  _generateData() {
+  _generateData() async {
+
     var sampleData = [
       new PiData('Spending', 100.0, Colors.blue[300]),
       new PiData('Remaining', 50.0, Colors.lightBlue[100])
@@ -42,7 +46,7 @@ class _HomePageState extends State<HomePage> {
           id: 'Chart Name',
           data: sampleData,
           domainFn: (PiData piData, _) =>
-              piData.item + " " + piData.expenditure.toStringAsFixed(2),
+          piData.item + " " + piData.expenditure.toStringAsFixed(2),
           measureFn: (PiData piData, _) => piData.expenditure,
           colorFn: (PiData piData, _) =>
               charts.ColorUtil.fromDartColor(piData.colorVal)),

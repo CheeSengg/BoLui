@@ -25,12 +25,17 @@ class _EntryPage extends State<EntryPage> {
   List<DropdownMenuItem<String>> list = [];
   List<String> generateList = ['Entertainment', 'Transport', 'Food', 'Others'];
   String selected;
+
   //function to add items into list
   //TODO: once the categories have been set write to load a list.
-  void loadData(){
+  void loadData() {
     list = [];
-    list = generateList.map((val) => new DropdownMenuItem(
-        child: new Text(val), value: val,)).toList();
+    list = generateList
+        .map((val) => new DropdownMenuItem(
+              child: new Text(val),
+              value: val,
+            ))
+        .toList();
 
     selected = generateList.last;
 //    list.add(new DropdownMenuItem(
@@ -78,31 +83,36 @@ class _EntryPage extends State<EntryPage> {
 
   List<Widget> buildInputs() {
     return [
-      Padding(padding: EdgeInsets.only(bottom: 10),),
+      Padding(
+        padding: EdgeInsets.only(bottom: 10),
+      ),
       listDrop(),
 //      inputBox('Category'),
-      Padding(padding: EdgeInsets.only(bottom: 10),),
+      Padding(
+        padding: EdgeInsets.only(bottom: 10),
+      ),
       inputBox('Description'),
-      Padding(padding: EdgeInsets.only(bottom: 10),),
+      Padding(
+        padding: EdgeInsets.only(bottom: 10),
+      ),
       numberField('Amount'),
-      Padding(padding: EdgeInsets.only(bottom: 10),),
+      Padding(
+        padding: EdgeInsets.only(bottom: 10),
+      ),
       button()
     ];
   }
 
-  Widget listDrop(){
+  Widget listDrop() {
     return Container(
-      child: new DropdownButton(
-        value: selected,
-        items: list,
-        onChanged: (value) {
-          selected = value;
-          setState(() {
-
-          });
-        },
-      )
-    );
+        child: new DropdownButton(
+      value: selected,
+      items: list,
+      onChanged: (value) {
+        selected = value;
+        setState(() {});
+      },
+    ));
   }
 
   // Configurations for textInputField
@@ -125,7 +135,7 @@ class _EntryPage extends State<EntryPage> {
   }
 
   // Configurations for numberInputField
-  Widget numberField(String hintText){
+  Widget numberField(String hintText) {
     return new TextFormField(
       inputFormatters: [
         WhitelistingTextInputFormatter.digitsOnly,
@@ -149,7 +159,7 @@ class _EntryPage extends State<EntryPage> {
   }
 
   // Configurations for Button
-  Widget button(){
+  Widget button() {
     return new RaisedButton(
       onPressed: createData,
       child: Text('Add', style: TextStyle(color: Colors.white)),
@@ -158,13 +168,15 @@ class _EntryPage extends State<EntryPage> {
   }
 
   void createData() async {
-    var date = DateTime.parse(DateTime.now().toString());
-    var formattedDate = "${date.day}-${date.month}-${date.year}";
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    //added year and month separately, any better way?
+    var year = DateTime.now().day;
+    var month = DateTime.now().month;
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      db.collection('Users').document(user.uid).add(
-          {'name': '$name', 'category': '$category', 'amount': '$amount', 'date': '$formattedDate'});
+      db
+          .collection(user.uid)
+          .add({'name': '$name', 'category': '$category', 'amount': amount, 'month': '$month', 'year': '$year'});
       Navigator.pop(context);
       //print(ref.documentID);
     }
