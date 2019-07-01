@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
+
+import 'package:bolui/util/currency_input_formatter.dart';
 
 class EntryPage extends StatefulWidget {
   @override
@@ -38,23 +38,6 @@ class _EntryPage extends State<EntryPage> {
         .toList();
 
     selected = generateList.last;
-//    list.add(new DropdownMenuItem(
-//      child: Text('Entertainment'),
-//      value: 1,
-//    ));
-//    list.add(new DropdownMenuItem(
-//      child: Text('Transport'),
-//      value: 2,
-//    ));
-//    list.add(new DropdownMenuItem(
-//      child: Text('Food'),
-//      value: 3,
-//    ));
-//    list.add(new DropdownMenuItem(
-//      child: Text('Others'),
-//      value: 4,
-//    ));
-//    selected = 4;
   }
 
   @override
@@ -110,6 +93,7 @@ class _EntryPage extends State<EntryPage> {
       items: list,
       onChanged: (value) {
         selected = value;
+        category = value;
         setState(() {});
       },
     ));
@@ -183,23 +167,4 @@ class _EntryPage extends State<EntryPage> {
   }
 }
 
-// Configurations for Number display format in Amount field
-class CurrencyInputFormatter extends TextInputFormatter {
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    if (newValue.selection.baseOffset == 0) {
-      print(true);
-      return newValue;
-    }
 
-    double value = double.parse(newValue.text);
-
-    final formatter = new NumberFormat("###,###,##0.00", "en_US");
-
-    String newText = formatter.format(value / 100);
-
-    return newValue.copyWith(
-        text: newText,
-        selection: new TextSelection.collapsed(offset: newText.length));
-  }
-}

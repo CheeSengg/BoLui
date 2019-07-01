@@ -20,11 +20,6 @@ enum AuthStatus { notSignedIn, signedIn }
 
 class _RootPageState extends State<RootPage> {
   var currentTab = 0;
-
-  final List<Widget> list = [HomePage(), SettingsPage()];
-
-  final List<String> header = ["Home", "Settings"];
-
   AuthStatus authStatus = AuthStatus.notSignedIn;
 
   @override
@@ -66,19 +61,9 @@ class _RootPageState extends State<RootPage> {
           case 0:
             return Scaffold(
               body: HomePage(),
-              bottomNavigationBar: BottomNavigationBar(
-                currentIndex: currentTab,
-                onTap: (int index) {
-                  setState(() {
-                    currentTab = index;
-                  });
-                },
-                items: [
-                  navigationBarItem(Icons.assessment, 'Home'),
-                  navigationBarItem(Icons.settings, 'Settings')
-                ],
-              ),
+              bottomNavigationBar: buildNavigationBar(),
             );
+
           case 1:
             //add auth here?
             return Scaffold(
@@ -86,38 +71,27 @@ class _RootPageState extends State<RootPage> {
                 auth: widget.auth,
                 onSignedOut: _signedOut,
               ),
-              bottomNavigationBar: BottomNavigationBar(
-                currentIndex: currentTab,
-                onTap: (int index) {
-                  setState(() {
-                    currentTab = index;
-                  });
-                },
-                items: [
-                  navigationBarItem(Icons.assessment, 'Home'),
-                  navigationBarItem(Icons.settings, 'Settings')
-                ],
-              ),
+              bottomNavigationBar: buildNavigationBar(),
             );
         }
-
-      //This code was removed due to the fact that you cannot pass parameters into setting in final.
-////        return Scaffold(
-////          body: list[currentTab],
-////          bottomNavigationBar: BottomNavigationBar(
-////            currentIndex: currentTab,
-////            onTap: (int index) {
-////              setState(() => currentTab = index);
-////            },
-////            items: [
-////              navigationBarItem(Icons.assessment, 'Home'),
-////              navigationBarItem(Icons.settings, 'Settings')
-////            ],
-////          ),
-////        );
     }
-
     return null;
+  }
+
+  // Configurations for NavigationBar Items
+  Widget buildNavigationBar(){
+    return BottomNavigationBar(
+      currentIndex: currentTab,
+      onTap: (int index) {
+        setState(() {
+          currentTab = index;
+        });
+      },
+      items: [
+        navigationBarItem(Icons.assessment, 'Home'),
+        navigationBarItem(Icons.settings, 'Settings')
+      ],
+    );
   }
 
   // Configuration for the BottomNavigationBarItem
