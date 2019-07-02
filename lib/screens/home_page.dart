@@ -1,25 +1,29 @@
 //Packages
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart' as prefix0;
 import 'package:flutter/material.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:bolui/util/auth.dart';
 import 'new_entry.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:bolui/util/pi_chart.dart';
+
 class HomePage extends StatefulWidget {
+  HomePage({this.auth,this.onSignedOut});
+  final BaseAuth auth;
+  final VoidCallback onSignedOut;
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  //The Variable that stores all the collection of PiData
-  //Should this variable be private? Think there will be data from other dart pages to update this.
-  List<charts.Series<PiData, String>> _createSampleData;
   final db = Firestore.instance;
 
   // Random data for testing
   final List<String> entries = <String>['A', 'B', 'C', 'D', 'E', 'F'];
+  List<charts.Series<PiData, String>> _createSampleData;
 
   // Random data for testing
   final List<IconData> icons = <IconData>[
@@ -33,7 +37,6 @@ class _HomePageState extends State<HomePage> {
 
   // Hardcoded trial data (can be deleted)
   _generateData() async {
-
     var sampleData = [
       new PiData('Spending', 100.0, Colors.blue[300]),
       new PiData('Remaining', 50.0, Colors.lightBlue[100])
@@ -61,8 +64,16 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: SizedBox(
+        width: 180,
+        child: Drawer(
+          child: ListView(
+            children: _buildSettings(),
+          ),
+        ),
+      ),
       appBar: AppBar(
-        title: Text('Stats'),
+        title: Center(child: Text('Stats')),
         actions: <Widget>[
           IconButton(
             icon: new Icon(Icons.add),
@@ -77,6 +88,20 @@ class _HomePageState extends State<HomePage> {
       ),
       body: scrollingView(),
     );
+  }
+
+  List<Widget> _buildSettings(){
+    return [
+      const ListTile(
+        title: Text('Settings', style: TextStyle(fontSize: 20),),
+      ),
+      Divider(),
+      new ListTile(
+        title: Text('LOG OUT', style: TextStyle(fontSize: 16),),
+        onTap: widget.onSignedOut,
+      ),
+      Divider(),
+    ];
   }
 
   //Configurations for the Scrolling View
@@ -139,7 +164,7 @@ class _HomePageState extends State<HomePage> {
       height: 300,
       child: Stack(
         children: <Widget>[
-          PiChart(_createSampleData),
+          PiChart(seriesList: _createSampleData),
           Column(
             children: <Widget>[
               Padding(padding: EdgeInsets.only(bottom: 120)),
@@ -198,32 +223,4 @@ class _HomePageState extends State<HomePage> {
       separatorBuilder: (BuildContext context, int index) => const Divider(),
     );
   }
-}
-
-// Configurations for the design of the PiChart
-class PiChart extends StatelessWidget {
-  final List<charts.Series> seriesList; //List to store values of the chart
-
-  PiChart(this.seriesList);
-
-  @override
-  Widget build(BuildContext context) {
-    return new charts.PieChart(
-      seriesList,
-      animate: true,
-      animationDuration: Duration(milliseconds: 500),
-      defaultRenderer: charts.ArcRendererConfig(
-        arcWidth: 10,
-      ),
-    );
-  }
-}
-
-//Parameters to create the PiChart
-class PiData {
-  final String item;
-  final double expenditure;
-  final Color colorVal;
-
-  PiData(this.item, this.expenditure, this.colorVal);
 }

@@ -23,7 +23,7 @@ class _EntryPage extends State<EntryPage> {
 
   //Hardcoded Data
   List<DropdownMenuItem<String>> list = [];
-  List<String> generateList = ['Entertainment', 'Transport', 'Food', 'Others'];
+  List<String> generateList = ['Entertainment','Food', 'Grocery','Transport', 'Others'];
   String selected;
 
   //function to add items into list
@@ -88,15 +88,16 @@ class _EntryPage extends State<EntryPage> {
 
   Widget listDrop() {
     return Container(
-        child: new DropdownButton(
-      value: selected,
-      items: list,
-      onChanged: (value) {
-        selected = value;
-        category = value;
-        setState(() {});
-      },
-    ));
+      child: new DropdownButton(
+        value: selected,
+        items: list,
+        onChanged: (value) {
+          category = value;
+          setState( () {selected = value;}
+          );
+        },
+      ),
+    );
   }
 
   // Configurations for textInputField
@@ -158,13 +159,15 @@ class _EntryPage extends State<EntryPage> {
     var month = DateTime.now().month;
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      db
-          .collection(user.uid)
-          .add({'name': '$name', 'category': '$category', 'amount': amount, 'month': '$month', 'year': '$year'});
+      db.collection(user.uid).add({
+        'name': '$name',
+        'category': '$category',
+        'amount': amount,
+        'month': '$month',
+        'year': '$year'
+      });
       Navigator.pop(context);
       //print(ref.documentID);
     }
   }
 }
-
-
