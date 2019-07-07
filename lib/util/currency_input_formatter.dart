@@ -4,8 +4,7 @@ import 'package:flutter/services.dart';
 
 // Configurations for Number display format in Amount field
 class CurrencyInputFormatter extends TextInputFormatter {
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     if (newValue.selection.baseOffset == 0) {
       print(true);
       return newValue;

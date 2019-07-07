@@ -1,14 +1,15 @@
 //Packages
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/cupertino.dart' as prefix0;
 import 'package:flutter/material.dart';
 import 'package:bolui/util/auth.dart';
 import 'new_entry.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:bolui/util/pi_chart.dart';
+import 'package:bolui/util/currency_input_formatter.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({this.auth,this.onSignedOut});
@@ -20,6 +21,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final db = Firestore.instance;
+  double amount; //Set Budget
 
   // Random data for testing
   final List<String> entries = <String>['A', 'B', 'C', 'D', 'E', 'F'];
@@ -68,7 +70,7 @@ class _HomePageState extends State<HomePage> {
         width: 180,
         child: Drawer(
           child: ListView(
-            children: _buildSettings(),
+            children: _buildSettings(context),
           ),
         ),
       ),
@@ -90,18 +92,68 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  List<Widget> _buildSettings(){
+  List<Widget> _buildSettings(BuildContext context){
     return [
       const ListTile(
         title: Text('Settings', style: TextStyle(fontSize: 20),),
       ),
       Divider(),
       new ListTile(
+        title: Text('Set Budget', style: TextStyle(fontSize: 16),),
+        onTap: () {
+          setBudget(context);
+        }
+      ),
+      Divider(),
+      new ListTile(
         title: Text('LOG OUT', style: TextStyle(fontSize: 16),),
         onTap: widget.onSignedOut,
       ),
-      Divider(),
     ];
+  }
+
+  void setBudget(BuildContext context){
+    showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Set your budget', style: TextStyle(fontSize: 24),),
+          content: new TextFormField(
+            inputFormatters: [
+              WhitelistingTextInputFormatter.digitsOnly,
+              new CurrencyInputFormatter(),
+            ],
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
+              border: InputBorder.none,
+              hintText: 'Key in your budget',
+              filled: true,
+            ),
+            keyboardType: TextInputType.number,
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Please do not leave it empty';
+              }
+            },
+            onSaved: (value) => amount = double.parse(value),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: const Text('CANCEL'),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            ),
+            FlatButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   //Configurations for the Scrolling View
