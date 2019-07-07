@@ -1,4 +1,5 @@
 //Packages
+import 'package:bolui/screens/transactions_page.dart';
 import 'package:flutter/material.dart';
 
 //Imports from own app
@@ -16,9 +17,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-//        brightness: Brightness.light,
-//        primaryColor: Colors.lightBlue[800],
-//        accentColor:  Colors.cyan[100],
           primaryColor: Color.fromRGBO(58, 66, 86, 1.0)
       ),
       debugShowCheckedModeBanner: false,
@@ -28,8 +26,7 @@ class MyApp extends StatelessWidget {
 }
 
 class RootPage extends StatefulWidget {
-  RootPage(
-      {this.auth}); //TODO: What does this mean ah? are the info from here passed out?
+  RootPage({this.auth}); //TODO: What does this mean ah? are the info from here passed out?
   final BaseAuth auth;
 
   @override
@@ -87,10 +84,7 @@ class _RootPageState extends State<RootPage> {
           case 1:
           //add auth here?
             return Scaffold(
-              body: SettingsPage(
-                auth: widget.auth,
-                onSignedOut: _signedOut,
-              ),
+              body: TransactionsPage(),
               bottomNavigationBar: buildNavigationBar(),
             );
         }
@@ -109,7 +103,7 @@ class _RootPageState extends State<RootPage> {
       },
       items: [
         navigationBarItem(Icons.assessment, 'Home'),
-        navigationBarItem(Icons.settings, 'Settings')
+        navigationBarItem(Icons.account_balance, 'Transactions')
       ],
     );
   }

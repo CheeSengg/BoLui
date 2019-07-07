@@ -22,7 +22,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final db = Firestore.instance;
   final _formKey = GlobalKey<FormState>();
-  double amount; //Set Budget
+  double budget; //Set Budget
   String id;
   String date;
 
@@ -62,10 +62,11 @@ class _HomePageState extends State<HomePage> {
 
   void createData() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    print(user.uid.toString());
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       db.collection(user.uid).document(date).setData({
-        'budget': amount,
+        'budget': budget,
       });
       //print(ref.documentID);
       print('data was successfully created');
@@ -155,7 +156,7 @@ class _HomePageState extends State<HomePage> {
                   return 'Please do not leave it empty';
                 }
               },
-              onSaved: (value) => amount = double.parse(value),
+              onSaved: (value) => budget = double.parse(value),
             ),
           ),
           actions: <Widget>[

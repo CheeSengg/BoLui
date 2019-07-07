@@ -20,7 +20,6 @@ class _EntryPage extends State<EntryPage> {
   String description;
   String category;
   double amount;
-  String date;
 
   //Hardcoded Data
   List<DropdownMenuItem<String>> list = [];
@@ -45,7 +44,6 @@ class _EntryPage extends State<EntryPage> {
   @override
   void initState() {
     loadData();
-    date = DateTime.now().year.toString() + '_' + DateTime.now().month.toString();
     super.initState();
   }
 
@@ -158,12 +156,18 @@ class _EntryPage extends State<EntryPage> {
   void createData() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     //added year and month separately, any better way?
+    var year = DateTime.now().year;
+    var month = DateTime.now().month;
+    var day = DateTime.now().day;
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      db.collection(user.uid).document(date).collection('log').add({
-        'description': '$description',
-        'category': '$category',
+      db.collection(user.uid).add({
+        'description': description,
+        'category': category,
         'amount': amount,
+        'day' : day,
+        'month': month,
+        'year': year,
       });
       Navigator.pop(context);
       //print(ref.documentID);
