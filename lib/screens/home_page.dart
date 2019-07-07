@@ -3,8 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bolui/util/auth.dart';
 import 'new_entry.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -21,7 +21,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final db = Firestore.instance;
+  final _formKey = GlobalKey<FormState>();
   double amount; //Set Budget
+  String id;
+  String date;
+
 
   // Random data for testing
   final List<String> entries = <String>['A', 'B', 'C', 'D', 'E', 'F'];
@@ -56,9 +60,23 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void createData() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      db.collection(user.uid).document(date).setData({
+        'budget': amount,
+      });
+      //print(ref.documentID);
+      print('data was successfully created');
+    }
+    Navigator.of(context).pop();
+  }
+
   @override
   void initState() {
     super.initState();
+    date = DateTime.now().year.toString() + '_' + DateTime.now().month.toString();
     _createSampleData = List<charts.Series<PiData, String>>();
     _generateData();
   }
@@ -118,37 +136,38 @@ class _HomePageState extends State<HomePage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Set your budget', style: TextStyle(fontSize: 24),),
-          content: new TextFormField(
-            inputFormatters: [
-              WhitelistingTextInputFormatter.digitsOnly,
-              new CurrencyInputFormatter(),
-            ],
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
-              border: InputBorder.none,
-              hintText: 'Key in your budget',
-              filled: true,
+          content: new Form(
+            key: _formKey,
+            child: new TextFormField(
+              inputFormatters: [
+                WhitelistingTextInputFormatter.digitsOnly,
+                new CurrencyInputFormatter(),
+              ],
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
+                border: InputBorder.none,
+                hintText: 'Key in your budget',
+                filled: true,
+              ),
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Please do not leave it empty';
+                }
+              },
+              onSaved: (value) => amount = double.parse(value),
             ),
-            keyboardType: TextInputType.number,
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Please do not leave it empty';
-              }
-            },
-            onSaved: (value) => amount = double.parse(value),
           ),
           actions: <Widget>[
             FlatButton(
               child: const Text('CANCEL'),
               onPressed: () {
-                Navigator.of(context).pop(true);
+                Navigator.of(context).pop();
               },
             ),
             FlatButton(
               child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
+              onPressed: createData,
             ),
           ],
         );
