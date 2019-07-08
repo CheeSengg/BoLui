@@ -42,7 +42,8 @@ class _HomePageState extends State<HomePage> {
   ];
 
   // Hardcoded trial data (can be deleted)
-  _generateData() async {
+  _generateData() {
+
     var sampleData = [
       new PiData('Spending', 100.0, Colors.blue[300]),
       new PiData('Remaining', 50.0, Colors.lightBlue[100])
@@ -60,7 +61,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void createData() async {
+  void _createData() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     print(user.uid.toString());
     if (_formKey.currentState.validate()) {
@@ -73,6 +74,7 @@ class _HomePageState extends State<HomePage> {
     }
     Navigator.of(context).pop();
   }
+
 
   @override
   void initState() {
@@ -168,7 +170,7 @@ class _HomePageState extends State<HomePage> {
             ),
             FlatButton(
               child: const Text('OK'),
-              onPressed: createData,
+              onPressed: _createData,
             ),
           ],
         );

@@ -12,7 +12,7 @@ class CurrencyInputFormatter extends TextInputFormatter {
 
     double value = double.parse(newValue.text);
 
-    final formatter = new NumberFormat("###,###,##0.00", "en_US");
+    final formatter = new NumberFormat("########0.00", "en_US");
 
     String newText = formatter.format(value / 100);
 

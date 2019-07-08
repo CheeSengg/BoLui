@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -13,19 +14,20 @@ class TransactionsPage extends StatefulWidget{
 
 class _TransactionPageState extends State<TransactionsPage>{
   final db = Firestore.instance;
+  String date;
   String userID;
+
+  void _getUser() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    userID = user.uid;
+  }
 
   @override
   void initState() {
     super.initState();
+    date = DateTime.now().year.toString() + "_" + DateTime.now().month.toString();
+    _getUser();
   }
-
-//  _createSnapshot() async {
-//    FirebaseUser user = await FirebaseAuth.instance.currentUser();
-//    print(user.uid.toString() + " hi this is a test");
-//
-//    return ;
-//  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,21 +42,23 @@ class _TransactionPageState extends State<TransactionsPage>{
   }
 
   Widget _buildBody(BuildContext context){
+    if(userID == null) return LinearProgressIndicator();
     return new StreamBuilder(
-      stream: Firestore.instance.collection('CxdKw2TK7INi5B1CJzgt6Dbsv7n1')
+      stream: Firestore.instance.collection(userID)
+          .document(date)
+          .collection('log')
           .orderBy('day', descending: false)
-          .where('month', isEqualTo: DateTime.now().month)
-          .where('year', isEqualTo: DateTime.now().year)
           .snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (!snapshot.hasData) return LinearProgressIndicator();
 
+        print(snapshot.data.documents.length);
         return new ListView(
           children: snapshot.data.documents.map((document){
-            return new ListTile(
+    return new ListTile(
               title: Text(document['description'].toString()),
               subtitle: Text(document['category'].toString()),
-              trailing: Text(document['amount'].toString()),
+              trailing: Text(document['amount'].toStringAsFixed(2)),
             );
           }).toList(),
         );

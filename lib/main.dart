@@ -77,14 +77,14 @@ class _RootPageState extends State<RootPage> {
         switch (currentTab) {
           case 0:
             return Scaffold(
-              body: HomePage(auth: widget.auth, onSignedOut: _signedOut,),
+              body: new HomePage(auth: widget.auth, onSignedOut: _signedOut,),
               bottomNavigationBar: buildNavigationBar(),
             );
 
           case 1:
           //add auth here?
             return Scaffold(
-              body: TransactionsPage(),
+              body: new TransactionsPage(),
               bottomNavigationBar: buildNavigationBar(),
             );
         }
