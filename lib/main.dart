@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
 }
 
 class RootPage extends StatefulWidget {
-  RootPage({this.auth}); //TODO: What does this mean ah? are the info from here passed out?
+  RootPage({this.auth});
   final BaseAuth auth;
 
   @override

@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "586480151586-0jlf5rv3jbp41qjnu1jdvdhf54g9632n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.bolui",
+            "certificate_hash": "6e9a62f55cf7f0539b01210060c356426d938cb9"
+          }
+        },
+        {
           "client_id": "586480151586-ogek2i2gs1ef9kk4btb4pvmn1o7dhth5.apps.googleusercontent.com",
           "client_type": 3
         }

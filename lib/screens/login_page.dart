@@ -1,6 +1,6 @@
 //Packages
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 //Own imports
 import '../util/auth.dart';
@@ -61,7 +61,13 @@ class _LoginPageState extends State<LoginPage> {
       }
     }
   }
-//TODO Beautify login in page + include google sign in
+
+  void googleValidateAndSubmit() async {
+    var userId = await widget.auth.signInWithGoogle();
+    widget.onSignedIn();
+  }
+
+//TODO Beautify login in page
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -103,6 +109,11 @@ class _LoginPageState extends State<LoginPage> {
         new RaisedButton(
           child: new Text('Login', style: new TextStyle(fontSize: 20.0)),
           onPressed: validateAndSubmit,
+        ),
+        new Padding(padding: EdgeInsets.only(bottom: 10.0),),
+        new RaisedButton(
+          child: new Text('Sign In With Google', style: new TextStyle(fontSize: 20.0)),
+          onPressed: googleValidateAndSubmit,
         ),
         new FlatButton(
           child: new Text('Create an account',
