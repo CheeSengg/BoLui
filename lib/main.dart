@@ -1,12 +1,14 @@
 //Packages
 import 'package:bolui/screens/transactions_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 //Imports from own app
 import 'screens/home_page.dart';
 import 'screens/settings_page.dart';
 import 'screens/login_page.dart';
 import 'util/auth.dart';
+import 'models/combined_model.dart';
 
 
 void main() => runApp(MyApp());
@@ -15,12 +17,15 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-          primaryColor: Color.fromRGBO(58, 66, 86, 1.0)
+    return ChangeNotifierProvider<CombinedModel>(
+      builder: (context) => CombinedModel(),
+      child: MaterialApp(
+        theme: ThemeData(
+            primaryColor: Color.fromRGBO(58, 66, 86, 1.0)
+        ),
+        debugShowCheckedModeBanner: false,
+        home: RootPage(auth: Auth()),
       ),
-      debugShowCheckedModeBanner: false,
-      home: RootPage(auth: Auth()),
     );
   }
 }
@@ -45,7 +50,6 @@ class _RootPageState extends State<RootPage> {
     widget.auth.currentUser().then((userId) {
       setState(() {
         authStatus = userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
-        print(userId);
       });
     });
   }
@@ -66,6 +70,8 @@ class _RootPageState extends State<RootPage> {
 
   @override
   Widget build(BuildContext context) {
+//    final model = Provider.of<CombinedModel>(context);
+//    model.loginUser(userId);
     switch (authStatus) {
       case AuthStatus.notSignedIn:
         return new LoginPage(
