@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../models/combined_model.dart';
 
 
 class TransactionsPage extends StatefulWidget{
@@ -17,16 +19,11 @@ class _TransactionPageState extends State<TransactionsPage>{
   String date;
   String userID;
 
-  void _getUser() async {
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    userID = user.uid;
-  }
 
   @override
   void initState() {
     super.initState();
     date = DateTime.now().year.toString() + "_" + DateTime.now().month.toString();
-    _getUser();
   }
 
   @override
@@ -42,9 +39,11 @@ class _TransactionPageState extends State<TransactionsPage>{
   }
 
   Widget _buildBody(BuildContext context){
-    if(userID == null) return LinearProgressIndicator();
+    final model = Provider.of<CombinedModel>(context); //create a class called model based on the model class in provider
+    print(model.user.uid);
+    if(model.user.uid == null) return LinearProgressIndicator();
     return new StreamBuilder(
-      stream: Firestore.instance.collection(userID)
+      stream: Firestore.instance.collection(model.user.uid)
           .document(date)
           .collection('log')
           .orderBy('day', descending: false)
