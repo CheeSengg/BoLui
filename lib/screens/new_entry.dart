@@ -157,7 +157,7 @@ class _EntryPage extends State<EntryPage> {
     );
   }
 
-  void createData() async {
+  void createData() {
     final model = Provider.of<CombinedModel>(context);
     print(model.user.uid);
     //added year and month separately, any better way?
