@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 
 import 'package:bolui/util/currency_input_formatter.dart';
+import '../models/combined_model.dart';
 
 class EntryPage extends StatefulWidget {
   @override
@@ -156,12 +158,13 @@ class _EntryPage extends State<EntryPage> {
   }
 
   void createData() async {
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    final model = Provider.of<CombinedModel>(context);
+    print(model.user.uid);
     //added year and month separately, any better way?
     var day = DateTime.now().day;
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      db.collection(user.uid).document(year_month).collection('log').add({
+      db.collection(model.user.uid).document(year_month).collection('log').add({
         'description': description,
         'category': category,
         'amount': amount,

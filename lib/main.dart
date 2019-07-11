@@ -2,6 +2,7 @@
 import 'package:bolui/screens/transactions_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 //Imports from own app
 import 'screens/home_page.dart';
@@ -47,6 +48,7 @@ class _RootPageState extends State<RootPage> {
   @override
   void initState() {
     super.initState();
+    _storeUID();
     widget.auth.currentUser().then((userId) {
       setState(() {
         authStatus = userId == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
@@ -68,10 +70,14 @@ class _RootPageState extends State<RootPage> {
     });
   }
 
+  void _storeUID() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    final model = Provider.of<CombinedModel>(context);
+    model.loginUser(user.uid);
+  }
+
   @override
   Widget build(BuildContext context) {
-//    final model = Provider.of<CombinedModel>(context);
-//    model.loginUser(userId);
     switch (authStatus) {
       case AuthStatus.notSignedIn:
         return new LoginPage(
