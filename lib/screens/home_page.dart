@@ -6,10 +6,13 @@ import 'new_entry.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+
 
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:bolui/util/pi_chart.dart';
 import 'package:bolui/util/currency_input_formatter.dart';
+import '../models/combined_model.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({this.auth,this.onSignedOut});
@@ -22,31 +25,30 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final db = Firestore.instance;
   final _formKey = GlobalKey<FormState>();
-  double budget; //Set Budget
-  String id;
+  double budget;
   String date;
 
 
   // Random data for testing
-  final List<String> entries = <String>['A', 'B', 'C', 'D', 'E', 'F'];
+  final List<String> entries = <String>['Entertainment', 'Food', 'Grocery', 'Transport', 'Others'];
   List<charts.Series<PiData, String>> _createSampleData;
 
   // Random data for testing
   final List<IconData> icons = <IconData>[
-    Icons.add,
-    Icons.assessment,
-    Icons.settings,
-    Icons.calendar_today,
-    Icons.crop_square,
-    Icons.favorite
+    Icons.shopping_basket,
+    Icons.fastfood,
+    Icons.local_grocery_store,
+    Icons.directions_transit,
+    Icons.shopping_cart,
+
   ];
 
   // Hardcoded trial data (can be deleted)
-  _generateData() {
-
+  _generateData(double budget) {
+    //added the following two lines + caused error
     var sampleData = [
       new PiData('Spending', 100.0, Colors.blue[300]),
-      new PiData('Remaining', 50.0, Colors.lightBlue[100])
+      new PiData('Remaining', budget, Colors.lightBlue[100]) //changed the value here to reflect budget.
     ];
 
     _createSampleData.add(
@@ -61,7 +63,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _createData() async {
+  void _setBudget() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     print(user.uid.toString());
     if (_formKey.currentState.validate()) {
@@ -81,11 +83,41 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     date = DateTime.now().year.toString() + '_' + DateTime.now().month.toString();
     _createSampleData = List<charts.Series<PiData, String>>();
-    _generateData();
+
   }
 
   @override
   Widget build(BuildContext context) {
+    final model = Provider.of<CombinedModel>(context);
+    budget = model.budget;
+    print("generated data: " + model.budget.toStringAsFixed(2));
+    _generateData(budget);
+
+    if(budget == null) return Scaffold(
+        drawer: SizedBox(
+          width: 180,
+          child: Drawer(
+            child: ListView(
+              children: _buildSettings(context),
+            ),
+          ),
+        ),
+        appBar: AppBar(
+          title: Center(child: Text('Stats')),
+          actions: <Widget>[
+            IconButton(
+              icon: new Icon(Icons.add),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => new EntryPage()),
+                );
+              },
+            ),
+          ],
+        ),
+      body: CircularProgressIndicator(),
+    );
     return Scaffold(
       drawer: SizedBox(
         width: 180,
@@ -170,7 +202,7 @@ class _HomePageState extends State<HomePage> {
             ),
             FlatButton(
               child: const Text('OK'),
-              onPressed: _createData,
+              onPressed: _setBudget,
             ),
           ],
         );
@@ -283,7 +315,7 @@ class _HomePageState extends State<HomePage> {
               Padding(padding: EdgeInsets.only(right: 8.0)),
               Expanded(
                 child: Text(
-                  'Entry ${entries[index]}',
+                  '${entries[index]}',
                   style: TextStyle(
                     fontSize: 20,
                     fontFamily: 'Roboto',

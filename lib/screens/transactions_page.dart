@@ -2,31 +2,25 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../models/combined_model.dart';
 
-
-class TransactionsPage extends StatefulWidget{
-
+class TransactionsPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return _TransactionPageState();
   }
 }
 
-class _TransactionPageState extends State<TransactionsPage>{
+class _TransactionPageState extends State<TransactionsPage> {
   final db = Firestore.instance;
   String date;
-  String userID;
-
-  void _getUser() async {
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    userID = user.uid;
-  }
 
   @override
   void initState() {
     super.initState();
-    date = DateTime.now().year.toString() + "_" + DateTime.now().month.toString();
-    _getUser();
+    date =
+        DateTime.now().year.toString() + "_" + DateTime.now().month.toString();
   }
 
   @override
@@ -34,28 +28,36 @@ class _TransactionPageState extends State<TransactionsPage>{
     return Scaffold(
       appBar: AppBar(
         title: Center(
-          child: Text('Transactions', style: TextStyle(fontSize: 24),),
+          child: Text(
+            'Transactions',
+            style: TextStyle(fontSize: 24),
+          ),
         ),
       ),
       body: _buildBody(context),
     );
   }
 
-  Widget _buildBody(BuildContext context){
-    if(userID == null) return Center(child: CircularProgressIndicator());
+  Widget _buildBody(BuildContext context) {
+    final model = Provider.of<CombinedModel>(context); //create a class called model based on the model class in provider
+    print(model.user.uid);
+
+    if (model.user.uid == null) return CircularProgressIndicator();
     return new StreamBuilder(
-      stream: Firestore.instance.collection(userID)
+      stream: Firestore.instance
+          .collection(model.user.uid)
           .document(date)
           .collection('log')
           .orderBy('day', descending: false)
           .snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
+        if (!snapshot.hasData)
+          return Center(child: CircularProgressIndicator());
 
         print(snapshot.data.documents.length);
         return new ListView(
-          children: snapshot.data.documents.map((document){
-    return new ListTile(
+          children: snapshot.data.documents.map((document) {
+            return new ListTile(
               title: Text(document['description'].toString()),
               subtitle: Text(document['category'].toString()),
               trailing: Text(document['amount'].toStringAsFixed(2)),
