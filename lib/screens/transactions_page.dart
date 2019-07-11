@@ -42,7 +42,7 @@ class _TransactionPageState extends State<TransactionsPage>{
   }
 
   Widget _buildBody(BuildContext context){
-    if(userID == null) return LinearProgressIndicator();
+    if(userID == null) return Center(child: CircularProgressIndicator());
     return new StreamBuilder(
       stream: Firestore.instance.collection(userID)
           .document(date)
@@ -50,7 +50,7 @@ class _TransactionPageState extends State<TransactionsPage>{
           .orderBy('day', descending: false)
           .snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (!snapshot.hasData) return LinearProgressIndicator();
+        if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
 
         print(snapshot.data.documents.length);
         return new ListView(
