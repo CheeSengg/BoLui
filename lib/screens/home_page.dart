@@ -286,15 +286,31 @@ class _HomePageState extends State<HomePage> {
 }
 
 class CategoryList extends StatelessWidget {
+  Map<String, double> categories = Map();
+  final List<String> entries = <String>['Entertainment', 'Food', 'Grocery', 'Transport', 'Others'];
+
+
+  _generateList(BuildContext context) {
+    var category = Provider.of<List<Entry>>(context);
+    for(int i = 0; i < entries.length; i++){
+      double amount = 0.0;
+      var list = category.where((p) => p.category == entries[i]);
+      list.forEach((n) => amount += n.amount);
+      categories[entries[i]] = amount;
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    var category = Provider.of<List<Entry>>(context);
+    _generateList(context);
+
     return ListView.builder(
-      itemCount: category.length,
+      itemCount: categories.length,
       itemBuilder: (context, index) {
         return ListTile(
-          title: Text(category[index].category),
-          trailing: Text(category[index].amount.toString()),
+          title: Text(entries[index]),
+          trailing: Text(categories[entries[index]].toString()),
         );
       },
     );
