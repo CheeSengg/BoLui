@@ -14,6 +14,7 @@ import 'package:bolui/util/pi_chart.dart';
 import 'package:bolui/util/currency_input_formatter.dart';
 import '../models/combined_model.dart';
 import 'package:bolui/util/database_service.dart';
+import 'package:bolui/models/category_list.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({this.auth,this.onSignedOut});
@@ -35,16 +36,6 @@ class _HomePageState extends State<HomePage> {
   // Random data for testing
   final List<String> entries = <String>['Entertainment', 'Food', 'Grocery', 'Transport', 'Others'];
   List<charts.Series<PiData, String>> _createSampleData;
-
-  // Random data for testing
-  final List<IconData> icons = <IconData>[
-    Icons.shopping_basket,
-    Icons.fastfood,
-    Icons.local_grocery_store,
-    Icons.directions_transit,
-    Icons.shopping_cart,
-
-  ];
 
   // Hardcoded trial data (can be deleted)
   _generateData() {
@@ -80,6 +71,8 @@ class _HomePageState extends State<HomePage> {
     Navigator.of(context).pop();
   }
 
+
+
   @override
   void initState() {
     super.initState();
@@ -90,8 +83,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
       drawer: SizedBox(
         width: 180,
@@ -128,7 +119,7 @@ class _HomePageState extends State<HomePage> {
       new ListTile(
         title: Text('Set Budget', style: TextStyle(fontSize: 16),),
         onTap: () {
-          setBudget(context);
+          _setBudgetForm(context);
         }
       ),
       Divider(),
@@ -139,7 +130,7 @@ class _HomePageState extends State<HomePage> {
     ];
   }
 
-  void setBudget(BuildContext context){
+  void _setBudgetForm(BuildContext context){
     showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
@@ -281,38 +272,6 @@ class _HomePageState extends State<HomePage> {
     return StreamProvider<List<Entry>>.value(
         value: database.streamCategory(model.user.uid, date),
         child: CategoryList(),
-    );
-  }
-}
-
-class CategoryList extends StatelessWidget {
-  Map<String, double> categories = Map();
-  final List<String> entries = <String>['Entertainment', 'Food', 'Grocery', 'Transport', 'Others'];
-
-
-  _generateList(BuildContext context) {
-    var category = Provider.of<List<Entry>>(context);
-    for(int i = 0; i < entries.length; i++){
-      double amount = 0.0;
-      var list = category.where((p) => p.category == entries[i]);
-      list.forEach((n) => amount += n.amount);
-      categories[entries[i]] = amount;
-    }
-  }
-
-
-  @override
-  Widget build(BuildContext context) {
-    _generateList(context);
-
-    return ListView.builder(
-      itemCount: categories.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-          title: Text(entries[index]),
-          trailing: Text(categories[entries[index]].toString()),
-        );
-      },
     );
   }
 }
