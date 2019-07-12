@@ -13,6 +13,7 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:bolui/util/pi_chart.dart';
 import 'package:bolui/util/currency_input_formatter.dart';
 import '../models/combined_model.dart';
+import 'package:bolui/util/database_service.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({this.auth,this.onSignedOut});
@@ -24,7 +25,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final db = Firestore.instance;
+  final database = DatabaseService();
   final _formKey = GlobalKey<FormState>();
+
   double budget;
   String date;
 
@@ -44,11 +47,11 @@ class _HomePageState extends State<HomePage> {
   ];
 
   // Hardcoded trial data (can be deleted)
-  _generateData(double budget) {
+  _generateData() {
     //added the following two lines + caused error
     var sampleData = [
       new PiData('Spending', 100.0, Colors.blue[300]),
-      new PiData('Remaining', budget, Colors.lightBlue[100]) //changed the value here to reflect budget.
+      new PiData('Remaining', 50.0, Colors.lightBlue[100]) //changed the value here to reflect budget.
     ];
 
     _createSampleData.add(
@@ -77,47 +80,18 @@ class _HomePageState extends State<HomePage> {
     Navigator.of(context).pop();
   }
 
-
   @override
   void initState() {
     super.initState();
     date = DateTime.now().year.toString() + '_' + DateTime.now().month.toString();
     _createSampleData = List<charts.Series<PiData, String>>();
-
+    _generateData();
   }
 
   @override
   Widget build(BuildContext context) {
-    final model = Provider.of<CombinedModel>(context);
-    budget = model.budget;
-    print("generated data: " + model.budget.toStringAsFixed(2));
-    _generateData(budget);
 
-    if(budget == null) return Scaffold(
-        drawer: SizedBox(
-          width: 180,
-          child: Drawer(
-            child: ListView(
-              children: _buildSettings(context),
-            ),
-          ),
-        ),
-        appBar: AppBar(
-          title: Center(child: Text('Stats')),
-          actions: <Widget>[
-            IconButton(
-              icon: new Icon(Icons.add),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => new EntryPage()),
-                );
-              },
-            ),
-          ],
-        ),
-      body: CircularProgressIndicator(),
-    );
+
     return Scaffold(
       drawer: SizedBox(
         width: 180,
@@ -303,30 +277,26 @@ class _HomePageState extends State<HomePage> {
 
   //Configurations for ListView of the different spending entries
   Widget spendingCategories() {
-    return ListView.separated(
-      padding: const EdgeInsets.only(top: 2.0, bottom: 2.0, left: 8.0),
-      itemCount: entries.length,
-      itemBuilder: (BuildContext context, int index) {
-        return Container(
-          height: 50,
-          child: Row(
-            children: <Widget>[
-              Icon(icons[index]),
-              Padding(padding: EdgeInsets.only(right: 8.0)),
-              Expanded(
-                child: Text(
-                  '${entries[index]}',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontFamily: 'Roboto',
-                  ),
-                ),
-              ),
-            ],
-          ),
+    var model = Provider.of<CombinedModel>(context);
+    return StreamProvider<List<Entry>>.value(
+        value: database.streamCategory(model.user.uid, date),
+        child: CategoryList(),
+    );
+  }
+}
+
+class CategoryList extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var category = Provider.of<List<Entry>>(context);
+    return ListView.builder(
+      itemCount: category.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          title: Text(category[index].category),
+          trailing: Text(category[index].amount.toString()),
         );
       },
-      separatorBuilder: (BuildContext context, int index) => const Divider(),
     );
   }
 }

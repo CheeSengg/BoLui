@@ -73,10 +73,6 @@ class _RootPageState extends State<RootPage> {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     final model = Provider.of<CombinedModel>(context);
     model.loginUser(user.uid);
-    model.loadBudget(DateTime.now().month.toString(), DateTime.now().year.toString());
-    model.loadTransaction(DateTime.now().month.toString(), DateTime.now().year.toString());
-
-    print(model.budget);
   }
 
 
