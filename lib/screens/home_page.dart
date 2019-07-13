@@ -9,11 +9,9 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:bolui/util/pi_chart.dart';
 import 'package:bolui/util/currency_input_formatter.dart';
 import '../models/combined_model.dart';
-import 'package:bolui/util/database_service.dart';
 import 'package:bolui/models/category_list.dart';
 
 class HomePage extends StatefulWidget {
@@ -25,35 +23,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final database = DatabaseService();
-  final date = DateTime.now().year.toString() + "_" + DateTime.now().month.toString();
-
-  @override
-  Widget build(BuildContext context) {
-    var model = Provider.of<CombinedModel>(context);
-    return MultiProvider(
-      providers: [
-        StreamProvider<List<Entry>>.value(
-            value: database.streamCategory(model.user.uid, date)),
-        StreamProvider<Entry>.value(
-            value: database.streamBudget(model.user.uid, date))
-      ],
-      child: HomePageWidgets(auth: widget.auth, onSignedOut: widget.onSignedOut,),
-    );
-  }
-}
-
-class HomePageWidgets extends StatefulWidget {
-  HomePageWidgets({this.auth,this.onSignedOut});
-  final BaseAuth auth;
-  final VoidCallback onSignedOut;
-  @override
-  State<StatefulWidget> createState() {
-    return _HomePageWidgetsState();
-  }
-}
-
-class _HomePageWidgetsState extends State<HomePageWidgets>{
   final _formKey = GlobalKey<FormState>();
   final db = Firestore.instance;
   double budget = 0;
@@ -61,27 +30,7 @@ class _HomePageWidgetsState extends State<HomePageWidgets>{
 
   // Random data for testing
   final List<String> entries = <String>['Entertainment', 'Food', 'Grocery', 'Transport', 'Others'];
-  List<charts.Series<PiData, String>> _createSampleData;
 
-  // Hardcoded trial data (can be deleted)
-  _generateData() {
-    //added the following two lines + caused error
-    var sampleData = [
-      new PiData('Spending', 100.0, Colors.blue[300]),
-      new PiData('Remaining', budget, Colors.lightBlue[100]) //changed the value here to reflect budget.
-    ];
-
-    _createSampleData.add(
-      charts.Series(
-          id: 'Chart Name',
-          data: sampleData,
-          domainFn: (PiData piData, _) =>
-          piData.item + " " + piData.expenditure.toStringAsFixed(2),
-          measureFn: (PiData piData, _) => piData.expenditure,
-          colorFn: (PiData piData, _) =>
-              charts.ColorUtil.fromDartColor(piData.colorVal)),
-    );
-  }
 
   void _setBudget() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
@@ -103,13 +52,12 @@ class _HomePageWidgetsState extends State<HomePageWidgets>{
   void initState() {
     super.initState();
     date = DateTime.now().year.toString() + '_' + DateTime.now().month.toString();
-    _createSampleData = List<charts.Series<PiData, String>>();
-    _generateData();
   }
 
   Widget build(BuildContext context) {
     var entry = Provider.of<Entry>(context) ?? Entry();
-    if(entry != null) budget = entry.amount;
+    if(entry.amount != null) budget = entry.amount;
+    print("help me see the light please $budget");
     return Scaffold(
       drawer: SizedBox(
         width: 180,
@@ -144,10 +92,10 @@ class _HomePageWidgetsState extends State<HomePageWidgets>{
       ),
       Divider(),
       new ListTile(
-        title: Text('Set Budget', style: TextStyle(fontSize: 16),),
-        onTap: () {
-          _setBudgetForm(context);
-        }
+          title: Text('Set Budget', style: TextStyle(fontSize: 16),),
+          onTap: () {
+            _setBudgetForm(context);
+          }
       ),
       Divider(),
       new ListTile(
@@ -225,7 +173,7 @@ class _HomePageWidgetsState extends State<HomePageWidgets>{
   Widget collapseWindow() {
     return Column(
       children: <Widget>[
-        donutPi(),
+        PiChart(budget: this.budget,),
         Divider(),
         Expanded(
           child: Row(
@@ -257,41 +205,6 @@ class _HomePageWidgetsState extends State<HomePageWidgets>{
 
   // Configurations for Container size of the PiChart
   // Configurations for the Text in the middle of PiChart
-  Widget donutPi() {
-    return Container(
-      height: 300,
-      child: Stack(
-        children: <Widget>[
-          PiChart(seriesList: _createSampleData),
-          Column(
-            children: <Widget>[
-              Padding(padding: EdgeInsets.only(bottom: 120)),
-              Center(
-                child: new Text(
-                  '\$50.00',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 36,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-              Center(
-                child: const Text(
-                  'Left to spend',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.black,
-                  ),
-                ),
-              )
-            ],
-          ),
-        ],
-      ),
-    );
-  }
 
-  //Configurations for ListView of the different spending entries
+
 }

@@ -19,6 +19,6 @@ class DatabaseService {
         .collection(id)
         .document(date)
         .snapshots()
-        .map((snap) => Entry.fromFirestore(snap));
+        .map((snap) => Entry.fromMap(snap.data));
   }
 }

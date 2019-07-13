@@ -20,15 +20,26 @@ class CombinedModel with ChangeNotifier {
 class Entry {
   double amount;
   String category;
+  String description;
 
-  Entry({this.amount, this.category});
+  Entry({this.amount, this.category, this.description});
 
   factory Entry.fromFirestore(DocumentSnapshot docSnap){
     Map data = docSnap.data;
 
     return Entry(
       amount: data['amount'],
-      category: data['category']
+      category: data['category'],
+      description: data['description']
+    );
+  }
+
+  factory Entry.fromMap(Map data) {
+    data = data ?? { };
+    return Entry(
+      category: data['category'] ?? '',
+      amount: data['budget'] ?? 0,
+      description: data['description'] ?? ''
     );
   }
 }

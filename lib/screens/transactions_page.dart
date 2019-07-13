@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +19,13 @@ class _TransactionPageState extends State<TransactionsPage> {
   void initState() {
     super.initState();
     date =
-        DateTime.now().year.toString() + "_" + DateTime.now().month.toString();
+        DateTime
+            .now()
+            .year
+            .toString() + "_" + DateTime
+            .now()
+            .month
+            .toString();
   }
 
   @override
@@ -39,74 +44,17 @@ class _TransactionPageState extends State<TransactionsPage> {
   }
 
   Widget _buildBody(BuildContext context) {
-    final model = Provider.of<CombinedModel>(context); //create a class called model based on the model class in provider
-    print(model.user.uid);
+    var category = Provider.of<List<Entry>>(context) ?? List();
 
-    if (model.user.uid == null) return CircularProgressIndicator();
-    return new StreamBuilder(
-      stream: Firestore.instance
-          .collection(model.user.uid)
-          .document(date)
-          .collection('log')
-          .orderBy('day', descending: false)
-          .snapshots(),
-      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (!snapshot.hasData)
-          return Center(child: CircularProgressIndicator());
-
-        print(snapshot.data.documents.length);
-        return new ListView(
-          children: snapshot.data.documents.map((document) {
-            return new ListTile(
-              title: Text(document['description'].toString()),
-              subtitle: Text(document['category'].toString()),
-              trailing: Text(document['amount'].toStringAsFixed(2)),
-            );
-          }).toList(),
+    return new ListView.builder(
+      itemCount: category.length,
+      itemBuilder: (context, index) {
+        return new ListTile(
+          title: Text(category[index].description),
+          subtitle: Text(category[index].category),
+          trailing: Text(category[index].amount.toStringAsFixed(2)),
         );
       },
     );
   }
-
-//  Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
-//    return ListView(
-//      padding: const EdgeInsets.only(top: 20.0),
-//      children: snapshot.map((data) => _buildListItem(context, data)).toList(),
-//    );
-//  }
-//
-//  Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
-//
-//
-//    return Padding(
-//      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-//      child: Container(
-//        decoration: BoxDecoration(
-//          border: Border.all(color: Colors.grey),
-//          borderRadius: BorderRadius.circular(5.0),
-//        ),
-//        child: ListTile(
-//          title:
-//          subtitle:
-//          trailing:
-//        ),
-//      ),
-//    );
-//  }
 }
-
-//class Record{
-//  String category;
-//  String description;
-//  double amount;
-//
-//  Record(this.category, this.description, this.amount);
-//
-//  Record.map(dynamic obj) {
-//    this.category = obj['category'];
-//    this.description = obj['description'];
-//    this.amount = obj['amount'];
-//  }
-//
-//  Record.fromSnapshot(Datasnapshot snapshot)
-//}
