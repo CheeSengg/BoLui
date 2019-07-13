@@ -89,20 +89,28 @@ class _RootPageState extends State<RootPage> {
       case AuthStatus.signedIn:
         switch (currentTab) {
           case 0:
-            return Scaffold(
-              body: new HomePage(auth: widget.auth, onSignedOut: _signedOut,),
-              bottomNavigationBar: buildNavigationBar(),
-            );
+            return _buildHomePage();
 
           case 1:
           //add auth here?
-            return Scaffold(
-              body: new TransactionsPage(),
-              bottomNavigationBar: buildNavigationBar(),
-            );
+            return _buildTransactionPage();
         }
     }
     return null;
+  }
+
+  Widget _buildHomePage() {
+    return Scaffold(
+      body: new HomePage(auth: widget.auth, onSignedOut: _signedOut,),
+      bottomNavigationBar: buildNavigationBar(),
+    );
+  }
+
+  Widget _buildTransactionPage() {
+    return Scaffold(
+      body: new TransactionsPage(),
+      bottomNavigationBar: buildNavigationBar(),
+    );
   }
 
   // Configurations for NavigationBar Items

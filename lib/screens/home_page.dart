@@ -25,13 +25,39 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final db = Firestore.instance;
   final database = DatabaseService();
+  final date = DateTime.now().year.toString() + "_" + DateTime.now().month.toString();
+
+  @override
+  Widget build(BuildContext context) {
+    var model = Provider.of<CombinedModel>(context);
+    return MultiProvider(
+      providers: [
+        StreamProvider<List<Entry>>.value(
+            value: database.streamCategory(model.user.uid, date)),
+        StreamProvider<Entry>.value(
+            value: database.streamBudget(model.user.uid, date))
+      ],
+      child: HomePageWidgets(auth: widget.auth, onSignedOut: widget.onSignedOut,),
+    );
+  }
+}
+
+class HomePageWidgets extends StatefulWidget {
+  HomePageWidgets({this.auth,this.onSignedOut});
+  final BaseAuth auth;
+  final VoidCallback onSignedOut;
+  @override
+  State<StatefulWidget> createState() {
+    return _HomePageWidgetsState();
+  }
+}
+
+class _HomePageWidgetsState extends State<HomePageWidgets>{
   final _formKey = GlobalKey<FormState>();
-
-  double budget;
+  final db = Firestore.instance;
+  double budget = 0;
   String date;
-
 
   // Random data for testing
   final List<String> entries = <String>['Entertainment', 'Food', 'Grocery', 'Transport', 'Others'];
@@ -42,7 +68,7 @@ class _HomePageState extends State<HomePage> {
     //added the following two lines + caused error
     var sampleData = [
       new PiData('Spending', 100.0, Colors.blue[300]),
-      new PiData('Remaining', 50.0, Colors.lightBlue[100]) //changed the value here to reflect budget.
+      new PiData('Remaining', budget, Colors.lightBlue[100]) //changed the value here to reflect budget.
     ];
 
     _createSampleData.add(
@@ -81,8 +107,9 @@ class _HomePageState extends State<HomePage> {
     _generateData();
   }
 
-  @override
   Widget build(BuildContext context) {
+    var entry = Provider.of<Entry>(context) ?? Entry();
+    if(entry != null) budget = entry.amount;
     return Scaffold(
       drawer: SizedBox(
         width: 180,
@@ -191,7 +218,7 @@ class _HomePageState extends State<HomePage> {
             )
           ];
         },
-        body: spendingCategories());
+        body: CategoryList());
   }
 
   //Widget tree for all components
@@ -267,11 +294,4 @@ class _HomePageState extends State<HomePage> {
   }
 
   //Configurations for ListView of the different spending entries
-  Widget spendingCategories() {
-    var model = Provider.of<CombinedModel>(context);
-    return StreamProvider<List<Entry>>.value(
-        value: database.streamCategory(model.user.uid, date),
-        child: CategoryList(),
-    );
-  }
 }
