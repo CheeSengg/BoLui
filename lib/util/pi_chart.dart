@@ -34,12 +34,14 @@ class _PiChartState extends State<PiChart> {
   @override
   void initState() {
     super.initState();
-    _createSampleData = List<charts.Series<PiData, String>>();
-    _generateData();
+//      _createSampleData = List<charts.Series<PiData, String>>();
+//      _generateData();
   }
 
   @override
   Widget build(BuildContext context){
+    _createSampleData = List<charts.Series<PiData, String>>();
+    _generateData();
     return Container(
       height: 300,
       child: Stack(

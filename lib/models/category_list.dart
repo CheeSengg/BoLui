@@ -20,7 +20,6 @@ class _CategoryListState extends State<CategoryList> {
     Icons.local_grocery_store,
     Icons.directions_transit,
     Icons.shopping_cart,
-
   ];
 
   _generateList(BuildContext context) {
@@ -44,7 +43,7 @@ class _CategoryListState extends State<CategoryList> {
         return ListTile(
           leading: Icon(icons[index]),
           title: Text(entries[index]),
-          trailing: Text(categories[entries[index]].toString()),
+          trailing: Text(categories[entries[index]].toStringAsFixed(2)),
         );
       },
     );
