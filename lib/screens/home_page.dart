@@ -187,7 +187,7 @@ class _HomePageState extends State<HomePage> {
   Widget collapseWindow() {
     return Column(
       children: <Widget>[
-        PiChart(budget: this.budget,),
+        PiChart(budget: this.budget, expenditure: this.expenditure),
         Divider(),
         Expanded(
           child: Row(

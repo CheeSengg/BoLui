@@ -3,7 +3,8 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 
 class PiChart extends StatefulWidget{
-  PiChart({this.budget});
+  PiChart({this.budget, this.expenditure});
+  final double expenditure;
   final double budget;
   @override
   State<StatefulWidget> createState() => new _PiChartState();
@@ -11,12 +12,16 @@ class PiChart extends StatefulWidget{
 
 class _PiChartState extends State<PiChart> {
   List<charts.Series<PiData, String>> _createSampleData;
+  bool hasOverspent = false;
 
   _generateData() {
-    //added the following two lines + caused error
+
+    hasOverspent = (widget.budget - widget.expenditure < 0) ? true : false;
+
+
     var sampleData = [
-      new PiData('Spending', 100.0, Colors.blue[300]),
-      new PiData('Remaining', widget.budget, Colors.lightBlue[100]) //changed the value here to reflect budget.
+      new PiData('Spending', widget.expenditure, hasOverspent? Colors.red[400] : Colors.blue[300]),
+      new PiData('Remaining', hasOverspent ? 0 : widget.budget, Colors.lightBlue[100])
     ];
 
     _createSampleData.add(
@@ -52,7 +57,9 @@ class _PiChartState extends State<PiChart> {
               Padding(padding: EdgeInsets.only(bottom: 120)),
               Center(
                 child: new Text(
-                  widget.budget.toStringAsFixed(2),
+                  hasOverspent ?
+                      (widget.expenditure - widget.budget).toStringAsFixed(2)
+                      : (widget.budget - widget.expenditure).toStringAsFixed(2),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 36,
@@ -61,8 +68,8 @@ class _PiChartState extends State<PiChart> {
                 ),
               ),
               Center(
-                child: const Text(
-                  'Left to spend',
+                child: new Text(
+                  hasOverspent ? 'Overspent' : 'Left to spend',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 14,
