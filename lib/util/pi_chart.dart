@@ -52,7 +52,7 @@ class _PiChartState extends State<PiChart> {
               Padding(padding: EdgeInsets.only(bottom: 120)),
               Center(
                 child: new Text(
-                  '\$50.00',
+                  widget.budget.toStringAsFixed(2),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 36,

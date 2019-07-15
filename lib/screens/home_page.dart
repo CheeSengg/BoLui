@@ -24,6 +24,7 @@ class _HomePageState extends State<HomePage> {
   final _formKey = GlobalKey<FormState>();
   final db = Firestore.instance;
   double budget = 0;
+  double expenditure = 0;
   String date;
 
   // Random data for testing
@@ -50,8 +51,12 @@ class _HomePageState extends State<HomePage> {
     }
     Navigator.of(context).pop();
   }
-
-
+  
+  void _generateExpenditure(List<Entry> entries){
+    double amount = 0.0;
+    entries.forEach((n) => amount += n.amount);
+    this.expenditure = amount;
+  }
 
   @override
   void initState() {
@@ -63,6 +68,10 @@ class _HomePageState extends State<HomePage> {
     var entry = Provider.of<Entry>(context) ?? Entry();
     if(entry.amount != null) budget = entry.amount;
     print("help me see the light please $budget");
+
+    var entries = Provider.of<List<Entry>>(context) ?? List();
+    _generateExpenditure(entries);
+
     return Scaffold(
       drawer: SizedBox(
         width: 180,
@@ -193,7 +202,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               new Text(
-                '\$100.00' + "  ",
+                this.expenditure.toStringAsFixed(2) + "  ",
                 textAlign: TextAlign.left,
                 textDirection: TextDirection.ltr,
                 style: TextStyle(
