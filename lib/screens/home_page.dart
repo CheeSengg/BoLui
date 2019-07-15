@@ -1,4 +1,5 @@
 //Packages
+import 'package:bolui/models/auth_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bolui/util/auth.dart';
@@ -15,9 +16,6 @@ import '../models/combined_model.dart';
 import 'package:bolui/models/category_list.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({this.auth,this.onSignedOut});
-  final BaseAuth auth;
-  final VoidCallback onSignedOut;
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -31,13 +29,20 @@ class _HomePageState extends State<HomePage> {
   // Random data for testing
   final List<String> entries = <String>['Entertainment', 'Food', 'Grocery', 'Transport', 'Others'];
 
+  Future<void> _signOut(BuildContext context) async {
+    try {
+      final BaseAuth auth = AuthProvider.of(context).auth;
+      await auth.signOut();
+    } catch (e) {
+      print(e);
+    }
+  }
 
   void _setBudget() async {
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    print(user.uid.toString());
+    final BaseAuth auth = AuthProvider.of(context).auth;
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      db.collection(user.uid).document(date).setData({
+      db.collection(auth.uid()).document(date).setData({
         'budget': budget,
       });
       //print(ref.documentID);
@@ -100,7 +105,7 @@ class _HomePageState extends State<HomePage> {
       Divider(),
       new ListTile(
         title: Text('LOG OUT', style: TextStyle(fontSize: 16),),
-        onTap: widget.onSignedOut,
+        onTap: () => _signOut(context),
       ),
     ];
   }

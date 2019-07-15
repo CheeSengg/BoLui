@@ -1,15 +1,12 @@
 //Packages
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:bolui/models/auth_provider.dart';
+import 'package:bolui/util/auth.dart';
 
 //Own imports
 import '../util/auth.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({this.auth, this.onSignedIn});
-  final BaseAuth auth;
-  final VoidCallback onSignedIn;
-
   @override
   _LoginPageState createState() => new _LoginPageState();
 }
@@ -50,12 +47,12 @@ class _LoginPageState extends State<LoginPage> {
   void validateAndSubmit() async {
     if (validateAndSave()) {
       try {
+        final BaseAuth auth = AuthProvider.of(context).auth;
         if (_formType == FormType.login) {
-          var userId = await widget.auth.signInWithEmailAndPassword(_email, _password);
+          var userId = await auth.signInWithEmailAndPassword(_email, _password);
         } else {
-          var userId = await widget.auth.createUserWithEmailAndPassword(_email, _password);
+          var userId = await auth.createUserWithEmailAndPassword(_email, _password);
         }
-        widget.onSignedIn();
       } catch (e) {
         print('error $e');
       }
@@ -63,8 +60,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void googleValidateAndSubmit() async {
-    var userId = await widget.auth.signInWithGoogle();
-    widget.onSignedIn();
+    final BaseAuth auth = AuthProvider.of(context).auth;
+    var userId = await auth.signInWithGoogle();
   }
 
 //TODO Beautify login in page

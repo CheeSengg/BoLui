@@ -6,31 +6,51 @@ abstract class BaseAuth {
   Future<String> createUserWithEmailAndPassword(String email, String password);
   Future<String> currentUser();
   Future<String> signInWithGoogle();
+  Stream<String> get onAuthStateChanged;
   Future<void> signOut();
+  String uid();
 }
 
 class Auth implements BaseAuth {
+  String userId;
+
+  @override
+  String uid() {
+    return userId;
+  }
+
+   @override
   Future<String> signInWithEmailAndPassword(
       String email, String password) async {
     FirebaseUser user = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
-    return user.uid;
+    return user?.uid;
   }
 
+  @override
+  Stream<String> get onAuthStateChanged {
+    return FirebaseAuth.instance.onAuthStateChanged.map((
+        FirebaseUser user) => userId = user?.uid); //user? is a shorthand notation to return userid only if it is not null
+  }
+
+  @override
   Future<String> createUserWithEmailAndPassword(
       String email, String password) async {
     FirebaseUser user = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
-    return user.uid;
+    return user?.uid;
   }
 
+  @override
   Future<String> currentUser() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    return user.uid;
+    return user?.uid;
   }
 
+  @override
   Future<void> signOut() async {
     return FirebaseAuth.instance.signOut();
   }
 
+  @override
   Future<String> signInWithGoogle() async {
     final GoogleSignIn _googleSignIn = new GoogleSignIn();
 
@@ -42,6 +62,6 @@ class Auth implements BaseAuth {
     );
 
     FirebaseUser user = await FirebaseAuth.instance.signInWithCredential(credential);
-    return user.uid;
+    return user?.uid;
   }
 }

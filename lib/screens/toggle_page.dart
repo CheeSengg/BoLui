@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:bolui/models/auth_provider.dart';
 
 import 'package:bolui/screens/transactions_page.dart';
 import 'package:bolui/screens/home_page.dart';
@@ -24,13 +25,13 @@ class _TogglePageState extends State<TogglePage> {
   final date = DateTime.now().year.toString() + "_" + DateTime.now().month.toString();
 
   Widget build(BuildContext context) {
-    var model = Provider.of<CombinedModel>(context) ?? CombinedModel();
+    final BaseAuth auth = AuthProvider.of(context).auth;
     return MultiProvider(
       providers: [
         StreamProvider<List<Entry>>.value(
-            value: database.streamCategory(model.user.uid, date)),
+            value: database.streamCategory(auth.uid(), date)),
         StreamProvider<Entry>.value(
-            value: database.streamBudget(model.user.uid, date))
+            value: database.streamBudget(auth.uid(), date))
       ],
       child: _buildPage(),
     );
@@ -49,10 +50,7 @@ class _TogglePageState extends State<TogglePage> {
 
   Widget _buildHomePage() {
     return Scaffold(
-      body: new HomePage(
-        auth: widget.auth,
-        onSignedOut: widget.onSignedOut,
-      ),
+      body: new HomePage(),
       bottomNavigationBar: buildNavigationBar(),
     );
   }
