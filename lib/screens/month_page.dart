@@ -4,10 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 
-
-
 import 'package:bolui/util/pi_chart.dart';
-import '../models/combined_model.dart';
+import 'package:bolui/models/combined_model.dart';
 import 'package:bolui/util/category_list.dart';
 
 class MonthPage extends StatefulWidget {
