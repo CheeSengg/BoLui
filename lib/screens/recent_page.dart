@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:bolui/models/combined_model.dart';
 
-class TransactionsPage extends StatefulWidget {
+class RecentPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return _TransactionPageState();
   }
 }
 
-class _TransactionPageState extends State<TransactionsPage> {
+class _TransactionPageState extends State<RecentPage> {
   final db = Firestore.instance;
   String date;
 

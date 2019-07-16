@@ -10,12 +10,12 @@ import 'package:bolui/util/pi_chart.dart';
 import '../models/combined_model.dart';
 import 'package:bolui/util/category_list.dart';
 
-class HomePage extends StatefulWidget {
+class MonthPage extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _MonthPageState createState() => _MonthPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _MonthPageState extends State<MonthPage> {
   final db = Firestore.instance;
   double budget = 0;
   double expenditure = 0;

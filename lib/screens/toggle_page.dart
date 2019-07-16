@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:bolui/models/auth_provider.dart';
 
-import 'package:bolui/screens/month_page.dart';
 import 'package:bolui/screens/recent_page.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -14,7 +13,7 @@ import 'package:bolui/util/database_service.dart';
 import 'package:bolui/util/auth.dart';
 import 'package:bolui/models/combined_model.dart';
 import 'package:bolui/screens/new_entry.dart';
-import 'package:bolui/screens/month_page_trial.dart';
+import 'package:bolui/screens/month_page.dart';
 
 class TogglePage extends StatefulWidget {
   TogglePage({this.auth, this.onSignedOut});
@@ -47,16 +46,16 @@ class _TogglePageState extends State<TogglePage> {
   _buildPage() {
     switch (currentTab) {
       case 0:
-        return _buildHomePage();
+        return _buildRecentPage();
 
       case 1:
         //add auth here?
-        return _buildTransactionPage();
+        return _buildMonthPage();
     }
   }
 
   //TODO: center it
-  Widget _buildHomePage() {
+  Widget _buildRecentPage() {
     return Scaffold(
       appBar: AppBar(
         title: Text('Recent'),
@@ -70,14 +69,14 @@ class _TogglePageState extends State<TogglePage> {
           ),
         ),
       ),
-      body: new HomePage(),
+      body: new RecentPage(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: buildFloatingActionButton(),
       bottomNavigationBar: buildNavigationBar(),
     );
   }
 
-  Widget _buildTransactionPage() {
+  Widget _buildMonthPage() {
     return Scaffold(
       appBar: AppBar(
         title: Text('Month'),
@@ -91,7 +90,7 @@ class _TogglePageState extends State<TogglePage> {
           ),
         ),
       ),
-      body: new TransactionsPage(),
+      body: new MonthPage(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: buildFloatingActionButton(),
       bottomNavigationBar: buildNavigationBar(),
