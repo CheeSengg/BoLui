@@ -31,14 +31,6 @@ class _TransactionPageState extends State<TransactionsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Center(
-          child: Text(
-            'Transactions',
-            style: TextStyle(fontSize: 24),
-          ),
-        ),
-      ),
       body: _buildBody(context),
     );
   }

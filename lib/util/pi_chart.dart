@@ -18,7 +18,6 @@ class _PiChartState extends State<PiChart> {
 
     hasOverspent = (widget.budget - widget.expenditure < 0) ? true : false;
 
-
     var sampleData = [
       new PiData('Spending', widget.expenditure, hasOverspent? Colors.red[400] : Colors.blue[300]),
       new PiData('Remaining', hasOverspent ? 0 : widget.budget, Colors.lightBlue[100])
