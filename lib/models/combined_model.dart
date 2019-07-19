@@ -19,13 +19,15 @@ class Entry {
   double amount;
   String category;
   String description;
+  int day;
 
-  Entry({this.amount, this.category, this.description});
+  Entry({this.amount, this.category, this.day, this.description});
 
   factory Entry.fromFirestore(DocumentSnapshot docSnap){
     Map data = docSnap.data;
 
     return Entry(
+      day: data['day'],
       amount: data['amount'],
       category: data['category'],
       description: data['description']
@@ -37,6 +39,7 @@ class Entry {
     return Entry(
       category: data['category'] ?? '',
       amount: data['budget'] ?? 0,
+      day: data['day'] ?? 0,
       description: data['description'] ?? ''
     );
   }

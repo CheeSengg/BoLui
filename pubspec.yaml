@@ -30,6 +30,8 @@ dependencies:
   cloud_firestore: ^0.12.5+2
   google_sign_in: ^4.0.2
   provider: ^3.0.0+1
+  flutter_signin_button: ^0.2.6
+  date_format: 1.0.6
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the Cupertino Icons class for iOS style icons.
@@ -52,8 +54,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-assets:
-  - assets/
+  assets:
+    - assets/
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
