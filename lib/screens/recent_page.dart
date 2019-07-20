@@ -20,13 +20,10 @@ class _TransactionPageState extends State<RecentPage> {
 
   double _generateTodaySpending(BuildContext context) {
     var entries = Provider.of<List<Entry>>(context) ?? List();
-    var reversedEntries = entries.reversed.toList();
     double todaySpending = 0;
-    int i = 0;
 
-    while (currDate == reversedEntries[i].day) {
-      todaySpending += reversedEntries[i].amount;
-      i++;
+    for(int i = 0; i < entries.length; i++){
+      if(currDate == entries[i].day) todaySpending += entries[i].amount;
     }
 
     return todaySpending;
@@ -41,7 +38,7 @@ class _TransactionPageState extends State<RecentPage> {
 
   @override
   Widget build(BuildContext context) {
-    var todaySpending = _generateTodaySpending(context);
+    var todaySpending = _generateTodaySpending(context).toStringAsFixed(2);
     return Scaffold(
       body: Container(
         child: ListView(
@@ -73,30 +70,29 @@ class _TransactionPageState extends State<RecentPage> {
 
   Widget _buildBody(BuildContext context) {
     var entries = Provider.of<List<Entry>>(context) ?? List();
-    var reversedEntries = entries.reversed.toList();
-    var runningDate = currDate;
+    var runningDate = 1;
     print(runningDate);
 
     return new ListView.builder(
       physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      itemCount: reversedEntries.length,
+      itemCount: entries.length,
       itemBuilder: (context, index) {
-        while (runningDate > reversedEntries[index].day) {
-          runningDate--;
+        while (runningDate < entries[index].day) {
+          runningDate++;
         }
-        if (runningDate == reversedEntries[index].day) {
-          runningDate--;
+        if (runningDate == entries[index].day) {
+          runningDate++;
           print(runningDate);
           return new Column(
             children: <Widget>[
-              _buildDateTile(context, reversedEntries[index]),
-              _buildEntryTile(context, reversedEntries[index]),
+              _buildDateTile(context, entries[index]),
+              _buildEntryTile(context, entries[index]),
             ],
           );
         } else {
-          runningDate--;
-          return _buildEntryTile(context, reversedEntries[index]);
+          runningDate++;
+          return _buildEntryTile(context, entries[index]);
         }
       },
     );

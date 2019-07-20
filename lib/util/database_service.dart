@@ -10,6 +10,7 @@ class DatabaseService {
         .collection(id)
         .document(date)
         .collection('log')
+        .orderBy('day', descending: false)
         .snapshots().map((list) =>
         list.documents.map((doc) => Entry.fromFirestore(doc)).toList());
   }

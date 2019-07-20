@@ -1,6 +1,5 @@
 //Packages
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 //Imports from own app
 import 'package:bolui/util/auth.dart';

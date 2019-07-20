@@ -67,15 +67,29 @@ class _CategoryListState extends State<CategoryList> {
         trailing: Text(root.amount.toStringAsFixed(2)),
       );
     }
+
     return ExpansionTile(
-      key: PageStorageKey<Tiles>(root),
-      leading: Icon(root.icon),
       title: Text(root.title),
+      leading: Icon(root.icon),
       trailing: Text(root.amount.toStringAsFixed(2)),
-      children: root.entries.map(_buildTiles).toList(),
+      children: <Widget>[
+        Divider(),
+        ListView.separated(
+          shrinkWrap: true,
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text(root.entries[index].title),
+              trailing: Text(root.entries[index].amount.toStringAsFixed(2)),
+            );
+          },
+          separatorBuilder: (context, index) => new Divider(),
+          itemCount: root.entries.length,
+        )
+      ],
     );
   }
 }
+
 
 class Tiles {
   String title;
