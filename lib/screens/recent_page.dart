@@ -18,6 +18,20 @@ class _TransactionPageState extends State<RecentPage> {
   var currDate = DateTime.now().day;
   String currMonth = formatDate(DateTime.now(), [MM]);
 
+  double _generateTodaySpending(BuildContext context) {
+    var entries = Provider.of<List<Entry>>(context) ?? List();
+    var reversedEntries = entries.reversed.toList();
+    double todaySpending = 0;
+    int i = 0;
+
+    while (currDate == reversedEntries[i].day) {
+      todaySpending += reversedEntries[i].amount;
+      i++;
+    }
+
+    return todaySpending;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -27,23 +41,30 @@ class _TransactionPageState extends State<RecentPage> {
 
   @override
   Widget build(BuildContext context) {
+    var todaySpending = _generateTodaySpending(context);
     return Scaffold(
       body: Container(
-        child: Column(
+        child: ListView(
+          primary: true,
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                  child: new Text(
-                'Hello there, you have spent too much money today',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 30.0,
+            new SizedBox(
+              height: 200.0,
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: SizedBox(
+                      child: new Text(
+                    'Hello, you have spent \$$todaySpending today', //add daily budget
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30.0,
+                    ),
+                  )),
                 ),
-              )),
+              ),
             ),
-            Expanded(child: _buildBody(context)),
+            Container(child: _buildBody(context)),
           ],
         ),
       ),
@@ -57,8 +78,13 @@ class _TransactionPageState extends State<RecentPage> {
     print(runningDate);
 
     return new ListView.builder(
+      physics: NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
       itemCount: reversedEntries.length,
       itemBuilder: (context, index) {
+        while (runningDate > reversedEntries[index].day) {
+          runningDate--;
+        }
         if (runningDate == reversedEntries[index].day) {
           runningDate--;
           print(runningDate);
@@ -69,9 +95,7 @@ class _TransactionPageState extends State<RecentPage> {
             ],
           );
         } else {
-          while (runningDate > reversedEntries[index].day) {
-            runningDate--;
-          }
+          runningDate--;
           return _buildEntryTile(context, reversedEntries[index]);
         }
       },
@@ -79,7 +103,8 @@ class _TransactionPageState extends State<RecentPage> {
   }
 
   Widget _buildDateTile(BuildContext context, Entry entry) {
-    print('build date tile');
+    print(entry.day);
+    print('hello');
     return Container(
       decoration: new BoxDecoration(
         color: Colors.black12,
@@ -88,11 +113,11 @@ class _TransactionPageState extends State<RecentPage> {
       child: new ListTile(
         title: Text((currDate == entry.day)
             ? 'Today'
-            : (currDate - 1 == entry.day)
+            : (((currDate - 1) == entry.day)
                 ? 'Yesterday'
                 : entry.day.toString() +
                     ' ' +
-                    currMonth),
+                    currMonth)),
       ),
     );
   }
