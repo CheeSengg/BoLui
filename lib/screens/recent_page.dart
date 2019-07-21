@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:bolui/models/combined_model.dart';
 import 'package:date_format/date_format.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:bolui/models/auth_provider.dart';
+import 'package:bolui/util/auth.dart';
 
 class RecentPage extends StatefulWidget {
   @override
@@ -119,10 +122,26 @@ class _TransactionPageState extends State<RecentPage> {
   }
 
   Widget _buildEntryTile(BuildContext context, Entry entry) {
-    return new ListTile(
-      title: Text(entry.description),
-      subtitle: Text(entry.category),
-      trailing: Text(entry.amount.toStringAsFixed(2)),
+    final BaseAuth auth = AuthProvider.of(context).auth;
+
+    return new Slidable(
+      actionPane: SlidableDrawerActionPane(),
+      actionExtentRatio: 0.25,
+      child: new ListTile(
+        title: Text(entry.description),
+        subtitle: Text(entry.category),
+        trailing: Text(entry.amount.toStringAsFixed(2)),
+      ),
+      secondaryActions: <Widget>[
+        IconSlideAction(
+          caption: 'Delete',
+          color: Colors.red,
+          icon: Icons.delete,
+          onTap: () {
+
+          }
+        ),
+      ],
     );
   }
 }
