@@ -7,6 +7,7 @@ import 'package:date_format/date_format.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:bolui/models/auth_provider.dart';
 import 'package:bolui/util/auth.dart';
+import 'package:bolui/screens/new_entry.dart';
 
 class RecentPage extends StatefulWidget {
   @override
@@ -102,8 +103,6 @@ class _TransactionPageState extends State<RecentPage> {
   }
 
   Widget _buildDateTile(BuildContext context, Entry entry) {
-    print(entry.day);
-    print('hello');
     return Container(
       decoration: new BoxDecoration(
         color: Colors.black12,
@@ -134,11 +133,14 @@ class _TransactionPageState extends State<RecentPage> {
       ),
       secondaryActions: <Widget>[
         IconSlideAction(
-          caption: 'Delete',
-          color: Colors.red,
-          icon: Icons.delete,
+          caption: 'Edit',
+          color: Colors.blue,
+          icon: Icons.edit,
           onTap: () {
-
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => new EntryPage()),
+            );
           }
         ),
       ],

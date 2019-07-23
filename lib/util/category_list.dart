@@ -15,16 +15,16 @@ class _CategoryListState extends State<CategoryList> {
   double expenditure = 0;
   List<Tiles> tiles = List<Tiles>();
   final List<String> categories = <String>[
-    'Entertainment',
+    'Leisure',
     'Food',
-    'Grocery',
+    'Household',
     'Transport',
     'Others'
   ];
   final List<IconData> icons = <IconData>[
     Icons.shopping_basket,
     Icons.fastfood,
-    Icons.local_grocery_store,
+    Icons.home,
     Icons.directions_transit,
     Icons.shopping_cart,
   ];

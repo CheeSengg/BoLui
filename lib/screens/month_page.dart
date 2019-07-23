@@ -20,7 +20,7 @@ class _MonthPageState extends State<MonthPage> {
   String date;
 
   // Random data for testing
-  final List<String> entries = <String>['Entertainment', 'Food', 'Grocery', 'Transport', 'Others'];
+  final List<String> entries = <String>['Leisure', 'Food', 'Household', 'Transport', 'Others'];
 
   @override
   void initState() {

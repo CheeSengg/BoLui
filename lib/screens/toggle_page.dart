@@ -157,7 +157,7 @@ class _TogglePageState extends State<TogglePage> {
       ),
       Divider(),
       new ListTile(
-        title: Text('LOG OUT', style: TextStyle(fontSize: 16),),
+        title: Text('Logout', style: TextStyle(fontSize: 16),),
         onTap: () => _signOut(context),
       ),
     ];
@@ -168,7 +168,7 @@ class _TogglePageState extends State<TogglePage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Set your budget', style: TextStyle(fontSize: 24),),
+          title: Text('What is your budget for this month?',textAlign: TextAlign.center, style: TextStyle(fontSize: 24, ),),
           content: new Form(
             key: _formKey,
             child: new TextFormField(
