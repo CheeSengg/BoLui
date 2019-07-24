@@ -177,12 +177,41 @@ class _EntryPage extends State<EntryPage> {
 
   // Configurations for Button
   Widget button() {
-    return new RaisedButton(
-      onPressed: createData,
-      child: Text(
-          widget.updateField ? 'Update' : 'Add',
-          style: TextStyle(color: Colors.white)),
-      color: widget.updateField ? Colors.blue : Colors.green,
+    if(widget.updateField == false){
+      return new RaisedButton(
+        onPressed: createData,
+        child: Text(
+            'Add',
+            style: TextStyle(color: Colors.white)
+        ),
+        color: Colors.green,
+      );
+    }
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        new Expanded(
+          child: RaisedButton(
+            onPressed: updateData,
+            child: Text(
+              'Edit',
+              style: TextStyle(color: Colors.white),
+            ),
+            color: Colors.blue,
+          ),
+        ),
+        new Expanded(
+          child: RaisedButton(
+            onPressed: deleteData,
+            child: Text(
+             'Delete',
+             style: TextStyle(color: Colors.white),
+            ),
+            color: Colors.red,
+          ),
+        ),
+      ],
     );
   }
 
@@ -191,7 +220,7 @@ class _EntryPage extends State<EntryPage> {
     print(auth.uid());
     //added year and month separately, any better way?
     var day = DateTime.now().day;
-    if (_formKey.currentState.validate() && widget.updateField == false) {
+    if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       db.collection(auth.uid()).document(yearMonth).collection('log').add({
         'description': description,
@@ -200,8 +229,13 @@ class _EntryPage extends State<EntryPage> {
         'day': day,
       });
       Navigator.pop(context);
+    }
+  }
 
-    } else if(_formKey.currentState.validate() && widget.updateField == true) {
+  void updateData(){
+    final BaseAuth auth = AuthProvider.of(context).auth;
+
+    if(_formKey.currentState.validate()) {
       _formKey.currentState.save();
       db.collection(auth.uid())
           .document(yearMonth)
@@ -215,6 +249,19 @@ class _EntryPage extends State<EntryPage> {
       });
       Navigator.pop(context);
     }
+  }
+
+  void deleteData() {
+    final BaseAuth auth = AuthProvider
+        .of(context)
+        .auth;
+
+    db.collection(auth.uid())
+        .document(yearMonth)
+        .collection('log')
+        .document(widget.docID)
+        .delete();
+    Navigator.pop(context);
   }
 }
 
