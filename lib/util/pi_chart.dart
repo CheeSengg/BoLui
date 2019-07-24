@@ -20,7 +20,7 @@ class _PiChartState extends State<PiChart> {
 
     var sampleData = [
       new PiData('Spending', widget.expenditure, hasOverspent? Colors.red[400] : Colors.blue[300]),
-      new PiData('Remaining', hasOverspent ? 0 : widget.budget, Colors.lightBlue[100])
+      new PiData('Remaining',  widget.budget,hasOverspent? Colors.red[100] : Colors.lightBlue[100])
     ];
 
     _createSampleData.add(
@@ -38,8 +38,6 @@ class _PiChartState extends State<PiChart> {
   @override
   void initState() {
     super.initState();
-//      _createSampleData = List<charts.Series<PiData, String>>();
-//      _generateData();
   }
 
   @override
