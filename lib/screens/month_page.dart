@@ -44,19 +44,19 @@ class _MonthPageState extends State<MonthPage> {
   Widget scrollingView() {
     return NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return [
-            SliverAppBar(
-              pinned: false,
-              backgroundColor: Colors.white,
-              flexibleSpace: FlexibleSpaceBar(
-                collapseMode: CollapseMode.pin,
-                background: collapseWindow(),
-              ),
-              expandedHeight: 350.0,
-            )
-          ];
-        },
-        body: CategoryList());
+      return [
+        SliverAppBar(
+          pinned: false,
+          backgroundColor: Colors.white,
+          flexibleSpace: FlexibleSpaceBar(
+            collapseMode: CollapseMode.pin,
+            background: collapseWindow(),
+          ),
+          expandedHeight: 350.0,
+        )
+      ];
+    },
+    body: CategoryList());
   }
 
   //Widget tree for all components

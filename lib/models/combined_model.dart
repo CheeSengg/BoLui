@@ -20,8 +20,9 @@ class Entry {
   String category;
   String description;
   int day;
+  String ref;
 
-  Entry({this.amount, this.category, this.day, this.description});
+  Entry({this.amount, this.category, this.day, this.description, this.ref});
 
   factory Entry.fromFirestore(DocumentSnapshot docSnap){
     Map data = docSnap.data;
@@ -30,7 +31,8 @@ class Entry {
       day: data['day'],
       amount: data['amount'],
       category: data['category'],
-      description: data['description']
+      description: data['description'],
+      ref: docSnap.documentID
     );
   }
 
@@ -40,7 +42,8 @@ class Entry {
       category: data['category'] ?? '',
       amount: data['budget'] ?? 0,
       day: data['day'] ?? 0,
-      description: data['description'] ?? ''
+      description: data['description'] ?? '',
+      ref: null
     );
   }
 }

@@ -102,7 +102,7 @@ class _TogglePageState extends State<TogglePage> {
       onPressed: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => new EntryPage()),
+          MaterialPageRoute(builder: (context) => new EntryPage(updateField: false,)),
         );
       },
       tooltip: 'New',

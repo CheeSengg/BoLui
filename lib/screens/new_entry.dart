@@ -8,6 +8,11 @@ import 'package:bolui/models/auth_provider.dart';
 import 'package:bolui/util/auth.dart';
 
 class EntryPage extends StatefulWidget {
+  EntryPage({this.updateField, this.docID, this.day});
+  final bool updateField;
+  final String docID;
+  final int day;
+
   @override
   _EntryPage createState() {
     return _EntryPage();
@@ -68,7 +73,7 @@ class _EntryPage extends State<EntryPage> {
       Padding(
         padding: EdgeInsets.only(bottom: 20),
       ),
-      numberField('Amount'),
+      numberField('00.00'),
       Padding(
         padding: EdgeInsets.only(bottom: 20),
       ),
@@ -93,18 +98,28 @@ class _EntryPage extends State<EntryPage> {
         children: List.generate(choices.length, (index) {
           return Center(
             child: Card(
-                color: Colors.white,
+                color: category == choices[index].title ? Colors.blue : Colors.white,
                 child: FlatButton(
                   onPressed: () {
-                    category = choices[index].title;
+                    setState(() {
+                      category = choices[index].title;
+                    });
                   },
                   child: Center(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        Icon(choices[index].icon,color: Colors.black38, size: 50.0),
-                        Text(choices[index].title),
+                        Icon(
+                            choices[index].icon,
+                            color: category == choices[index].title ? Colors.white : Colors.black38,
+                            size: 50.0),
+                        Text(
+                          choices[index].title,
+                          style: TextStyle(
+                            color: category == choices[index].title ? Colors.white : Colors.black
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -164,8 +179,10 @@ class _EntryPage extends State<EntryPage> {
   Widget button() {
     return new RaisedButton(
       onPressed: createData,
-      child: Text('Add', style: TextStyle(color: Colors.white)),
-      color: Colors.green,
+      child: Text(
+          widget.updateField ? 'Update' : 'Add',
+          style: TextStyle(color: Colors.white)),
+      color: widget.updateField ? Colors.blue : Colors.green,
     );
   }
 
@@ -174,7 +191,7 @@ class _EntryPage extends State<EntryPage> {
     print(auth.uid());
     //added year and month separately, any better way?
     var day = DateTime.now().day;
-    if (_formKey.currentState.validate()) {
+    if (_formKey.currentState.validate() && widget.updateField == false) {
       _formKey.currentState.save();
       db.collection(auth.uid()).document(yearMonth).collection('log').add({
         'description': description,
@@ -183,7 +200,20 @@ class _EntryPage extends State<EntryPage> {
         'day': day,
       });
       Navigator.pop(context);
-      //print(ref.documentID);
+
+    } else if(_formKey.currentState.validate() && widget.updateField == true) {
+      _formKey.currentState.save();
+      db.collection(auth.uid())
+          .document(yearMonth)
+          .collection('log')
+          .document(widget.docID)
+          .updateData({
+        'description': description,
+        'category': category,
+        'amount': amount,
+        'day': widget.day
+      });
+      Navigator.pop(context);
     }
   }
 }

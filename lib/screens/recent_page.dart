@@ -5,8 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:bolui/models/combined_model.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:bolui/models/auth_provider.dart';
-import 'package:bolui/util/auth.dart';
 import 'package:bolui/screens/new_entry.dart';
 
 class RecentPage extends StatefulWidget {
@@ -121,8 +119,6 @@ class _TransactionPageState extends State<RecentPage> {
   }
 
   Widget _buildEntryTile(BuildContext context, Entry entry) {
-    final BaseAuth auth = AuthProvider.of(context).auth;
-
     return new Slidable(
       actionPane: SlidableDrawerActionPane(),
       actionExtentRatio: 0.25,
@@ -139,7 +135,7 @@ class _TransactionPageState extends State<RecentPage> {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => new EntryPage()),
+              MaterialPageRoute(builder: (context) => new EntryPage(updateField: true, docID: entry.ref, day: entry.day,)),
             );
           }
         ),
