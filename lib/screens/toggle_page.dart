@@ -173,8 +173,7 @@ class _TogglePageState extends State<TogglePage> {
             key: _formKey,
             child: new TextFormField(
               inputFormatters: [
-                WhitelistingTextInputFormatter.digitsOnly,
-                new CurrencyInputFormatter(),
+                DecimalTextInputFormatter(decimalRange: 2),
               ],
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),

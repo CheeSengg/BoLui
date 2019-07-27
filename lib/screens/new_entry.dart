@@ -85,7 +85,7 @@ class _EntryPage extends State<EntryPage> {
       Padding(
         padding: EdgeInsets.only(bottom: 20),
       ),
-      button()
+      button(),
     ];
   }
 
@@ -98,12 +98,15 @@ class _EntryPage extends State<EntryPage> {
         children: List.generate(choices.length, (index) {
           return Center(
             child: Card(
-                color: category == choices[index].title ? Colors.blue : Colors.white,
+                color: category == choices[index].title ? Colors.blueGrey : Colors.white,
                 child: FlatButton(
                   onPressed: () {
                     setState(() {
                       category = choices[index].title;
                     });
+                    if (widget.updateField == false) {
+                      createData();
+                    };
                   },
                   child: Center(
                     child: Column(
@@ -155,8 +158,7 @@ class _EntryPage extends State<EntryPage> {
       // textAlign: TextAlign.center,
       style: TextStyle(fontSize: 50.0),
       inputFormatters: [
-        WhitelistingTextInputFormatter.digitsOnly,
-        new CurrencyInputFormatter(),
+        DecimalTextInputFormatter(decimalRange: 2),
       ],
       decoration: InputDecoration(
         // contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),

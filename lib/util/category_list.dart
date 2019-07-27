@@ -90,7 +90,6 @@ class _CategoryListState extends State<CategoryList> {
   }
 }
 
-
 class Tiles {
   String title;
   double amount;
