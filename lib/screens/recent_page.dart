@@ -17,6 +17,7 @@ class RecentPage extends StatefulWidget {
 class _TransactionPageState extends State<RecentPage> {
   final db = Firestore.instance;
   String date;
+  var numDays = new DateTime(DateTime.now().year, DateTime.now().month-1, 0).day;
   var currDate = DateTime.now().day;
   String currMonth = formatDate(DateTime.now(), [MM]);
 
@@ -41,6 +42,11 @@ class _TransactionPageState extends State<RecentPage> {
   @override
   Widget build(BuildContext context) {
     var todaySpending = _generateTodaySpending(context).toStringAsFixed(2);
+    print('there are $numDays days in the current month');
+    var todayBudget;
+    var entry = Provider.of<Entry>(context) ?? Entry();
+    if(entry.amount != null) todayBudget = (entry.amount / numDays).toStringAsFixed(2);
+
     return Scaffold(
       body: Container(
         child: ListView(
@@ -53,7 +59,7 @@ class _TransactionPageState extends State<RecentPage> {
                   padding: const EdgeInsets.all(20.0),
                   child: SizedBox(
                       child: new Text(
-                    'Hello, you have spent \$$todaySpending today', //add daily budget
+                    'Hello, you have spent \$$todaySpending / \$$todayBudget today', //add daily budget
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -72,7 +78,7 @@ class _TransactionPageState extends State<RecentPage> {
 
   Widget _buildBody(BuildContext context) {
     var entries = Provider.of<List<Entry>>(context) ?? List();
-    var runningDate = 1;
+    var runningDate = currDate;
     print(runningDate);
 
     return new ListView.builder(
@@ -80,11 +86,11 @@ class _TransactionPageState extends State<RecentPage> {
       shrinkWrap: true,
       itemCount: entries.length,
       itemBuilder: (context, index) {
-        while (runningDate < entries[index].day) {
-          runningDate++;
+        while (runningDate > entries[index].day) {
+          runningDate--;
         }
         if (runningDate == entries[index].day) {
-          runningDate++;
+          runningDate--;
           print(runningDate);
           return new Column(
             children: <Widget>[
@@ -93,7 +99,7 @@ class _TransactionPageState extends State<RecentPage> {
             ],
           );
         } else {
-          runningDate++;
+          runningDate--;
           return _buildEntryTile(context, entries[index]);
         }
       },
