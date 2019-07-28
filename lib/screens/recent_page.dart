@@ -141,7 +141,7 @@ class _TransactionPageState extends State<RecentPage> {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => new EntryPage(updateField: true, docID: entry.ref, day: entry.day,)),
+              MaterialPageRoute(builder: (context) => new EntryPage(updateField: true, entry: entry,)),
             );
           }
         ),

@@ -6,12 +6,12 @@ import 'package:flutter/services.dart';
 import 'package:bolui/util/currency_input_formatter.dart';
 import 'package:bolui/models/auth_provider.dart';
 import 'package:bolui/util/auth.dart';
+import 'package:bolui/models/combined_model.dart';
 
 class EntryPage extends StatefulWidget {
-  EntryPage({this.updateField, this.docID, this.day});
+  EntryPage({this.updateField, this.entry});
   final bool updateField;
-  final String docID;
-  final int day;
+  final Entry entry;
 
   @override
   _EntryPage createState() {
@@ -104,9 +104,7 @@ class _EntryPage extends State<EntryPage> {
                     setState(() {
                       category = choices[index].title;
                     });
-                    if (widget.updateField == false) {
-                      createData();
-                    };
+
                   },
                   child: Center(
                     child: Column(
@@ -242,12 +240,12 @@ class _EntryPage extends State<EntryPage> {
       db.collection(auth.uid())
           .document(yearMonth)
           .collection('log')
-          .document(widget.docID)
+          .document(widget.entry.ref)
           .updateData({
         'description': description,
         'category': category,
         'amount': amount,
-        'day': widget.day
+        'day': widget.entry.day
       });
       Navigator.pop(context);
     }
@@ -261,7 +259,7 @@ class _EntryPage extends State<EntryPage> {
     db.collection(auth.uid())
         .document(yearMonth)
         .collection('log')
-        .document(widget.docID)
+        .document(widget.entry.ref)
         .delete();
     Navigator.pop(context);
   }
