@@ -52,6 +52,8 @@ class _CategoryListState extends State<CategoryList> {
     _generateCategoryTiles(category);
 
     return ListView.builder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         return _buildTiles(tiles[index]);
       },

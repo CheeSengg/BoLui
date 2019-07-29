@@ -53,7 +53,7 @@ class _MonthPageState extends State<MonthPage> {
                 background: collapseWindow(),
               ),
               expandedHeight: 350.0,
-            )
+            ),
           ];
         },
         body: CategoryList());

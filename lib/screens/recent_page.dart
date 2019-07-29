@@ -99,7 +99,6 @@ class _TransactionPageState extends State<RecentPage> {
             ],
           );
         } else {
-          runningDate--;
           return _buildEntryTile(context, entries[index]);
         }
       },
